@@ -15,7 +15,7 @@ One row per Stitch workspace or project. Add a row when you create a new project
 
 - **`FRND-07` People (friends list, empty) — canonical:** **“FRND-07 People (Clean Header)”** — `b9f7b3961bb54fac8d57a26156e43aec`. Same **clean header** rule as NAV-01. Session: `12653398914178613375`.
 
-- **`FRND-07` People (with sample data) — canonical:** **“FRND-07 People (sample list) — tuned”** — `df0f342948c7404595c99ed603bb4d1b`. List rows / avatars **~10–15% smaller** than “— fixed” for balance; still readable. Session: `3236685683504174710`. Prior: `cb49b36fe47a4109b839e2f4cc74f9c1` (“— fixed”); rough `e9e0321f…` — delete in Stitch if unused.
+- **`FRND-07` People (with sample data) — canonical:** **“FRND-07 People (list — v3)”** — `6e8f1c50c9c4465895b685f88abb8f9c`. Rebuilt from **People empty (Clean Header)** with **standard iOS-style list density** (e.g. ~44–48pt avatars, ~17pt names, ~56–60pt rows) — middle ground vs oversized/tiny passes; **no** separate header strip; full-width tab bar. Session: `7428079361130783461`. Prior attempts: `df0f342…` (tuned), `cb49b36…` (fixed), `e9e0321f…` — delete in Stitch if unused.
 
 - **Superseded:** NAV-01 **Super Green Refined** — `24267fcade634b8bb472f1f411b7451c` (distinct header strip). FRND-07 earlier — `250791c96c51471bbdefffb70f671843`. Older NAV-01 variants — `74f915e81…`, `990b18e1…`. Delete in Stitch UI if unused.
 
