@@ -21,6 +21,7 @@
 
 ## Related docs
 
+- Design (Stitch projects, mockup decisions): [../../design/README.md](../../design/README.md)
 - Journeys: [personas-and-journeys](../personas-and-journeys.md)
 - Posts and reactions: [content-and-moderation](../content-and-moderation.md)
 - Graph and discovery: [discovery-and-graph](../discovery-and-graph.md)

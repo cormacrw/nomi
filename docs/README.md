@@ -11,12 +11,13 @@ Canonical planning specs for **Nomi** (working name). Implementation code will l
 5. **[Discovery and graph](product/discovery-and-graph.md)** — find-by-phone and friendship rules (**product contract**).
 6. **[Content and moderation](product/content-and-moderation.md)** — posts (up to 5 photos + caption), poster-only reactions, safety and reporting.
 7. **[Screens](product/screens/)** — [MVP scaffold](product/screens/mvp.md) first; full [inventory](product/screens/inventory.md); conventions in `screens/README.md`.
-8. **[Requirements](product/requirements.md)** — numbered requirements (draft).
-9. **[Stack constraints](stack/constraints.md)** — hard/soft technical boundaries.
-10. **[Stack options](stack/options.md)** — brainstorm before ADRs.
-11. **[Architecture decisions](stack/decisions/)** — ADRs (`0000` template, `0001` process).
-12. **[Phases](implementation/phases.md)** → **[Milestones](implementation/milestones.md)** → **[Risks and open questions](implementation/risks-and-open-questions.md)**.
-13. **[Legal / privacy](legal-privacy/)** — data handling and third parties (draft).
+8. **[Design](design/)** — Stitch project registry and design decision log.
+9. **[Requirements](product/requirements.md)** — numbered requirements (draft).
+10. **[Stack constraints](stack/constraints.md)** — hard/soft technical boundaries.
+11. **[Stack options](stack/options.md)** — brainstorm before ADRs.
+12. **[Architecture decisions](stack/decisions/)** — ADRs (`0000` template, `0001` process).
+13. **[Phases](implementation/phases.md)** → **[Milestones](implementation/milestones.md)** → **[Risks and open questions](implementation/risks-and-open-questions.md)**.
+14. **[Legal / privacy](legal-privacy/)** — data handling and third parties (draft).
 
 ## Map of folders
 
@@ -24,6 +25,7 @@ Canonical planning specs for **Nomi** (working name). Implementation code will l
 | Folder                             | Purpose                                                                                                                 |
 | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | [product/](product/)               | What we build: vision, branding, journeys, verification, graph, moderation, [screens/](product/screens/), requirements. |
+| [design/](design/)               | Mockup workflow: [Stitch registry](design/stitch-projects.md), [design decisions](design/decisions/) (UX/visual; distinct from stack ADRs). |
 | [stack/](stack/)                   | How we might build it: constraints, options, [decisions/](stack/decisions/) (ADRs).                                     |
 | [implementation/](implementation/) | Phasing, milestones, risks.                                                                                             |
 | [legal-privacy/](legal-privacy/)   | PII/phone/sms and vendor tracking (draft).                                                                              |
