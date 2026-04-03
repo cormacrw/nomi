@@ -23,6 +23,15 @@ Design tools and prompts must state this explicitly so generators do not revert 
 
 On **tab root** screens, **do not** place profile, settings, or other **actions in the top app bar**. The header is **context only** (e.g. centered screen title). **Primary navigation** (Feed / People / Create / You) lives in the **bottom tab bar** so behavior stays predictable and matches a single standard frame layout.
 
+### Tab root “header” — same surface as body
+
+The **screen title** does **not** need a visually different background. A separate **darker or lighter green band** behind the title reads as extra chrome and fights the full-bleed look. Prefer:
+
+- **One continuous emerald field** for the whole viewport (same green as the rest of the page).
+- **Title = typography only** — centered white (or mint) label with top safe-area padding, **no** header strip, **no** hairline under the title unless absolutely necessary for accessibility (default: **no line**).
+
+Hierarchy comes from **type size/weight** and spacing, not from a second header color.
+
 ## Links
 
 - [branding](../../product/branding.md) — global surface rule
