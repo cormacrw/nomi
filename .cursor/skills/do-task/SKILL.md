@@ -1,13 +1,15 @@
 ---
-name: linear-issue-worktree
+name: do-task
 description: >-
   Starts work from a Linear issue key using an isolated git worktree, optionally
   moves the agent to that root, opens a GitHub PR with issue context, and syncs
-  Linear (status + PR link). Use when the user gives an issue id (e.g. NOM-12),
-  wants parallel worktrees per issue, or says worktree / Linear / PR workflow.
+  Linear (status + PR link). Use when the user says do-task, gives an issue id
+  (e.g. NOM-12), wants parallel worktrees per issue, or says worktree / Linear / PR workflow.
 ---
 
-# Linear issue → worktree → PR → Linear
+# do-task
+
+Linear issue → worktree → PR → Linear.
 
 Requires **Linear MCP**, **git**, **GitHub CLI (`gh`)** authenticated to the repo, and **cursor-app-control** MCP for `move_agent_to_root` when switching the agent workspace.
 
