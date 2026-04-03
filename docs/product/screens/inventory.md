@@ -129,7 +129,7 @@ Stable IDs for Nomi. **States / variants** cover loading, empty, and error unles
 
 ## Coverage checklist (for design)
 
-Use this when building Stitch frames or Figma pages:
+Use this when building **Figma** frames — canonical file and tooling: Linear [NOM-11](https://linear.app/cormacw/issue/NOM-11/create-nomi-mvp-figma-file-structure-design-library); one issue per screen ID as children of the area epics ([NOM-2](https://linear.app/cormacw/issue/NOM-2/design-profile-prof)–[NOM-10](https://linear.app/cormacw/issue/NOM-10/design-create-post-post)):
 
 - `AUTH-01`–`AUTH-04` (plus `AUTH-05` if login separate)
 - `FRND-01`–`FRND-05` (plus `FRND-06`–`FRND-07` if in v1)
