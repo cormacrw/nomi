@@ -21,6 +21,7 @@ Context for visual design, copy, and UI—including tools such as **Google Stitc
 **Visual direction (locked preference)**
 
 - **Green-first UI**: green is the hero color—surfaces, primary actions, and key chrome lean green (not a tiny accent on an otherwise neutral app). Prefer **bold, saturated greens** (high chroma), not washed-out sage or pastel as the primary—still keep contrast accessible for text and icons.
+- **Bold green canvas (entire core app)** — **Do not** default the “main app” to a light parchment / off-white page while keeping green only for buttons. **Core screens** (shell, feed, friends, composer, profile roots, primary settings lists) use the **same full-bleed bold emerald treatment** as verification: immersive **#00875A / #006b47-class** green as the **default viewport background**, with **white / warm off-white typography** and **inverse pills** (cream/white fill, dark green text) for primary CTAs unless a specific exception is documented. Light neutrals belong on **small elevated pieces** (inputs, cards, sheets)—not as the app-wide skin. See [design decision 0001](../design/decisions/0001-bold-green-canvas-all-core-screens.md).
 - **Big buttons**: large tap targets, generous padding, obvious primary actions.
 - **Very simple interfaces**: few elements per screen, clear hierarchy, minimal decoration—see [Visual territory](#visual-territory) and [UI patterns](#ui-and-product-patterns-brand-adjacent).
 
@@ -67,7 +68,7 @@ Final tokens (exact hex/RGB) belong in a design system later; use this as a **mo
 ### Color
 
 - **Primary palette**: **green-forward and bold**—prefer **saturated, confident greens** (e.g. emerald / leaf / forest depth), not pale or dusty mint as the main brand color. Use a **coherent scale** from bold primary down to softer tints for surfaces so hierarchy stays clear—see [What to avoid](#what-to-avoid-brand-risks) for “one flat green everywhere.”
-- **Neutrals**: pair bold green with **soft off-white / warm gray** backgrounds so the UI stays calm and readable. Avoid rainbow accents; let green + neutrals do the work.
+- **Neutrals**: **Default page chrome is green**, not gray parchment—see **Bold green canvas** under [Visual direction](#brand-essence) above. Use **soft off-white / warm gray** only for **components on top of green** (e.g. text fields, cards, modal bodies) or **marketing surfaces outside the core app**, so hierarchy stays clear. Avoid rainbow accents; let green + restrained neutrals do the work.
 - **Contrast**: bold green buttons and icons need **accessible text contrast** (usually white or near-white on the primary green; validate WCAG AA for text and icons). If using a mid green, use dark text—validate in design, not only in generator output.
 - **Dark mode**: deep charcoal or green-tinted dark backgrounds with **clear, saturated green** for primary actions and focus rings; still **simple**—avoid neon lime unless intentional.
 - **Semantic**: success / verified states align naturally with green—keep them **consistent** with the primary green system so the app does not introduce a second unrelated “success color.”
@@ -132,7 +133,7 @@ Final tokens (exact hex/RGB) belong in a design system later; use this as a **mo
 
 Useful fragments for tools like Stitch (combine with layout goals):
 
-`Nomi`, `Nomi app`, `bold green`, `saturated green`, `emerald green UI`, `green-themed UI`, `green primary color`, `generous whitespace`, `large primary buttons`, `full-width CTA`, `simple layout`, `minimal UI chrome`, `one action per screen`, `warm minimal`, `small circle`, `private social`, `calm`, `friend-first`, `verified identity`, `readable sans-serif`, `no gamification`, `no viral energy`, `accessible contrast on green buttons`
+`Nomi`, `Nomi app`, `bold green`, `full-bleed emerald background`, `same green canvas as auth`, `saturated green`, `emerald green UI`, `green-themed UI`, `green primary color`, `no light parchment default`, `generous whitespace`, `large primary buttons`, `full-width CTA`, `simple layout`, `minimal UI chrome`, `one action per screen`, `warm minimal`, `small circle`, `private social`, `calm`, `friend-first`, `verified identity`, `readable sans-serif`, `no gamification`, `no viral energy`, `accessible contrast on green buttons`, `white text on green`
 
 ---
 
@@ -143,7 +144,7 @@ Use this block as **background context** when generating screens or design syste
 ```
 Product name: Nomi (working). Social app for people who only connect with others they already know in real life.
 Identity: Verified phone number required; users find each other by phone number, not a public directory.
-Brand: Warm, calm, trustworthy—intimate small-circle social, not influencer scale. Visual: SUPER GREEN themed UI using **bold, saturated green** as the hero—primary actions and key surfaces feel confident and high-chroma, not pale or washed out; pair with soft off-white or warm gray backgrounds. Big buttons, large tap targets, very simple screens with minimal elements and clear hierarchy. Ensure accessible text contrast on bold green buttons. Legible sans-serif, subtle motion. Voice: direct, plain language, reassuring in verification flows. Avoid: tiny controls, cluttered layouts, gamification chrome, unrelated rainbow accents, follower-chasing UI.
+Brand: Warm, calm, trustworthy—intimate small-circle social, not influencer scale. Visual: SUPER GREEN themed UI — **full-bleed bold emerald (#00875A / #006b47-class) as the default canvas for core app screens**, same as auth; white/cream type on green; primary CTAs often inverse pills (white/cream fill, dark green text). Do NOT default to a light parchment or gray “app shell” with green only on buttons. Use soft off-white/warm gray only for elevated components (inputs, cards, sheets) on top of green. Big buttons, large tap targets, very simple screens. Ensure accessible text contrast. Legible sans-serif, subtle motion. Voice: direct, plain language, reassuring in verification flows. Avoid: tiny controls, cluttered layouts, gamification chrome, unrelated rainbow accents, follower-chasing UI.
 ```
 
 ---

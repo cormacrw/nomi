@@ -14,7 +14,7 @@ It does **not** replace product specs:
 | Resource                                 | Purpose                                                                                                                                |
 | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | [stitch-projects.md](stitch-projects.md) | Registry of Stitch projects: links, scope (screen IDs / flows), status, owner.                                                         |
-| [decisions/](decisions/)                 | Numbered design decision records; start from [decisions/0000-design-decision-template.md](decisions/0000-design-decision-template.md). |
+| [decisions/](decisions/)                 | Numbered design decision records; start from [decisions/0000-design-decision-template.md](decisions/0000-design-decision-template.md). **0001** — [bold green canvas for all core screens](decisions/0001-bold-green-canvas-all-core-screens.md) (do not default to light “app shell”). |
 
 
 ## Naming in Stitch
