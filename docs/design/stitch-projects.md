@@ -4,7 +4,7 @@ One row per Stitch workspace or project. Add a row when you create a new project
 
 | Project name | Link or ID | Scope (flows / screen IDs) | Status | Owner | Last updated |
 | ------------ | ---------- | -------------------------- | ------ | ----- | ------------ |
-| Nomi — Auth MVP | `18104376503220593266` (Stitch project id; open in Google Stitch) | `AUTH-*`, **`NAV-01`**, **`FRND-07`** (People empty + **with sample friends**) — bold full-bleed emerald; 4-tab nav; **780×1688** logical (1560×3376 @2×), no scroll | In review | — | 2026-04-03 |
+| Nomi — Auth MVP | `18104376503220593266` (Stitch project id; open in Google Stitch) | `AUTH-*`, **`NAV-01`**, **`FRND-07`**, **`FEED-01`–`FEED-04`** ([NOM-54](https://linear.app/cormacw/issue/NOM-54/design-home-feed-and-post-detail)) — bold full-bleed emerald; 4-tab nav; **780×1688** logical (1560×3376 @2×), no scroll | In review | — | 2026-04-03 |
 | *(example)* Nomi — MVP shell | `https://…` or internal id | MVP frames per [mvp.md](../product/screens/mvp.md); e.g. `AUTH-*`, `FEED-*` | Draft | — | — |
 
 **Nomi — Auth MVP — canonical frames:**
@@ -16,6 +16,22 @@ One row per Stitch workspace or project. Add a row when you create a new project
 - **`FRND-07` People (friends list, empty) — canonical:** **“FRND-07 People (Clean Header)”** — `b9f7b3961bb54fac8d57a26156e43aec`. Same **clean header** rule as NAV-01. Session: `12653398914178613375`.
 
 - **`FRND-07` People (with sample data) — canonical:** **“FRND-07 People (list — v3)”** — `6e8f1c50c9c4465895b685f88abb8f9c`. Rebuilt from **People empty (Clean Header)** with **standard iOS-style list density** (e.g. ~44–48pt avatars, ~17pt names, ~56–60pt rows) — middle ground vs oversized/tiny passes; **no** separate header strip; full-width tab bar. Session: `7428079361130783461`. Prior attempts: `df0f342…` (tuned), `cb49b36…` (fixed), `e9e0321f…` — delete in Stitch if unused.
+
+- **NOM-54 — Home feed & post detail (`FEED-01`–`FEED-04`):** Generate in this project so frames sit next to **`NAV-01` Feed (Clean Header)** (`84455a0623b04ee6aa439d0afeb5bae7`). **Global rule:** full-bleed emerald viewport (**#00875A / #006b47**), **white/cream typography** on the green, post bodies on **elevated light cards** (inverse of the green canvas) — see [decision 0001](decisions/0001-bold-green-canvas-all-core-screens.md). Manrope for titles/author names, Inter for body and meta.
+
+  **Prompt — `FEED-01` Home feed (filled)**  
+  *Nomi mobile — FEED-01 Home feed (filled). Match NAV-01 Feed (Clean Header): same full-bleed emerald background, no darker header band, title “Home” or “Nomi” in white, subtle profile icon top-right. Scrollable feed: 3 friend post cards on light elevated surfaces (rounded corners, soft shadow or tonal lift). Each card: avatar, name (Manrope semibold), relative time (Inter caption), one landscape photo placeholder, 2-line caption, reaction row: heart + “You, Alex, Sam” on a **friend’s** post; on **your own** post show poster-visible aggregate like “Loved by 12 friends”. Bottom: same 4-tab bar as NAV-01 with Home active. Screen label: FEED-01 Home (filled).*
+
+  **Prompt — `FEED-01` Loading**  
+  *Same shell as FEED-01 filled; replace feed with skeleton placeholders (shimmer-style gray bars and rounded rects on card-shaped areas). Label: FEED-01 Home (loading).*
+
+  **Prompt — `FEED-01` Empty**  
+  *Same shell; main area: calm empty illustration or icon, headline “No posts yet”, supporting line about adding friends or checking back, primary button “Find friends” (inverse pill). Label: FEED-01 Home (empty).*
+
+  **Prompt — `FEED-02` Post detail**  
+  *FEED-02 Post detail: full-screen on same emerald canvas; back affordance top-left; author row; **multi-photo** area with swipeable carousel (dots), up to 5 photos; full caption; reaction affordance consistent with feed. For `FEED-03`/`FEED-04` product modes: show **friend** view (react + no others’ reaction list) vs **author** view (who reacted summary) as a small segmented note or subtitle — or generate two labeled variants. Title: FEED-02 Post detail.*
+
+  After generation, add **canonical frame ids** and session ids to this section (same pattern as NAV-01 / FRND-07).
 
 - **Superseded:** NAV-01 **Super Green Refined** — `24267fcade634b8bb472f1f411b7451c` (distinct header strip). FRND-07 earlier — `250791c96c51471bbdefffb70f671843`. Older NAV-01 variants — `74f915e81…`, `990b18e1…`. Delete in Stitch UI if unused.
 
