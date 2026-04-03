@@ -2,16 +2,18 @@
 name: do-task
 description: >-
   Starts work from a Linear issue key using an isolated git worktree, optionally
-  moves the agent to that root, opens a GitHub PR with issue context, and syncs
-  Linear (status + PR link). Use when the user says do-task, gives an issue id
-  (e.g. NOM-12), wants parallel worktrees per issue, or says worktree / Linear / PR workflow.
+  moves the agent to that root, completes the task, opens a GitHub PR (mandatory
+  close-out when there is anything to ship), and syncs Linear. Design/Figma issues:
+  create or update the Figma file (e.g. new page), then mark Linear ready for review,
+  then PR. Use when the user says do-task, gives an issue id (e.g. NOM-12), wants
+  parallel worktrees per issue, or says worktree / Linear / PR workflow.
 ---
 
 # do-task
 
-Linear issue → worktree → PR → Linear.
+Linear issue → worktree → **deliverables** → **PR** → Linear.
 
-Requires **Linear MCP**, **git**, **GitHub CLI (`gh`)** authenticated to the repo, and **cursor-app-control** MCP for `move_agent_to_root` when switching the agent workspace.
+Requires **Linear MCP**, **git**, **GitHub CLI (`gh`)** authenticated to the repo, and **cursor-app-control** MCP for `move_agent_to_root` when switching the agent workspace. **Figma MCP** (and loading the **figma-use** skill before `use_figma`) when the issue is design work in Figma.
 
 ## Linear ↔ GitHub
 
@@ -62,9 +64,31 @@ User provides **issue key** (e.g. `NOM-1`).
 
 **Parallel runs:** Each issue should use a **distinct** `WT_PATH` (e.g. different `ISSUE_KEY` folder under `nomi-worktrees`).
 
-## Phase B — Open PR and update Linear (after commits)
+## Design / Figma issues (before Phase B)
 
-Run from **inside the worktree** directory.
+Use this branch when the issue is **product UI in Figma** (new file, new page, frames, tokens)—not code-only refactors. Signals: label (e.g. Design / Figma), description mentions Figma, title contains “Figma”, or the user says it is a design task.
+
+1. **Canonical file** — Obtain **`fileKey`** for the Nomi MVP file (from the issue description/link, project docs, or ask once). URLs look like `https://www.figma.com/design/{fileKey}/…`.
+
+2. **Load figma-use** — Read the **figma-use** skill (project or Cursor plugin path) **before** any `use_figma` call.
+
+3. **Create or update in Figma** — Use **Figma MCP `use_figma`** with Plugin API code, for example:
+   - **New page:** `const page = figma.createPage(); page.name = '…';` (name from issue: area, screen group, or slug from title).
+   - **New file:** If the issue is “create the MVP file,” use `create_new_file` (with `planKey` from `whoami`) **then** `use_figma` in that file.
+
+   Keep pages aligned with screen groups when the issue asks for structure (Shell, Auth, Feed, etc.).
+
+4. **Link back to Linear** — `save_comment` on the issue with the **Figma URL** (file or specific page/frame node link). Update `save_issue` **description** only if your team pastes the canonical file link there.
+
+5. **Mark ready for review** — `save_issue` with `id` = issue key, `state` = the team’s **“Ready for review”** / **“In Review”** / **“Done”** (design sign-off), whichever matches your workflow. Use `list_issue_statuses` with the issue’s team and pick the closest match. Prefer a state that means *design is ready for review*, not only “code PR open”—that distinction is team-specific.
+
+6. **Repo work** — If the issue requires doc updates (inventory, branding link, screen checklist), commit those in the worktree **before** Phase B so the PR includes them.
+
+**Order:** Figma deliverable → comment with link → Linear status (ready for review) → **then** Phase B (PR). If the issue is purely Figma with **no** repo changes, still run Phase B only when there is at least one commit (e.g. a one-line doc link); if the user explicitly wants no git change, skip PR and document that exception.
+
+## Phase B — Open PR and update Linear (mandatory close-out)
+
+Run from **inside the worktree** directory when there is **anything to ship in git** (code, docs, config). This is the default **end state** of do-task: **push branch → open PR → sync Linear with the PR URL.**
 
 1. **Push branch** — `git push -u origin HEAD` (branch should already be `feature/{identifier}`).
 
@@ -73,6 +97,7 @@ Run from **inside the worktree** directory.
    - **Body** (markdown), include at minimum:
      - Link to Linear issue: issue `url` from `get_issue`.
      - Summary of changes (or bullets).
+     - For design issues: **Figma link** (file/page/frame) if not already only in Linear.
      - Optional: paste first ~40 lines of issue `description` if helpful for reviewers.
 
    With GitHub linked, Linear usually picks up the PR from the branch/repo; the link in the body still helps reviewers.
@@ -93,10 +118,12 @@ Run from **inside the worktree** directory.
    Use `--base main` or `--base master` to match the repo’s default branch.
 
 3. **Update Linear** — From `gh pr create` output, capture the PR URL, then:
-   - `save_issue` with `id` = issue key, `state` = `In Review` (or team’s equivalent for “PR open”) if automation has not already moved it.
+   - `save_issue` with `id` = issue key, `state` = `In Review` (or team’s equivalent for “PR open”) **if** the issue is still tracking the code review and automation has not already moved it. For design-first issues already marked “ready for review,” you may only add the PR link via comment instead of changing state again—follow team rules.
    - `save_comment` with `issueId` = issue key and `body` containing the **PR URL** and one line context, e.g. `Opened PR: https://github.com/...` (skip if the integration already posted the link and the user prefers a single source).
 
 If the team’s workflow uses different status names, use `list_issue_statuses` with the issue’s team and pick the closest match.
+
+**MCP note:** If `call_mcp_tool` fails for Linear or Figma with “server not available,” retry after a moment, confirm **Settings → MCP** shows the server connected, or complete the step manually in Linear/Figma. The agent’s MCP bridge can lag at session start.
 
 ## Quick reference
 
@@ -106,8 +133,9 @@ If the team’s workflow uses different status names, use `list_issue_statuses` 
 | Branch     | `feature/{lowercase issue key}` e.g. `feature/nom-1` |
 | Worktree   | `git fetch` → `git worktree add` (see Phase A) |
 | Agent root | `move_agent_to_root` with absolute `WT_PATH` |
-| PR         | `gh pr create` from worktree (Linear ↔ GitHub associates branch/PR) |
-| Linear     | `save_issue` / `save_comment` as needed |
+| Design     | figma-use → `use_figma` (and `create_new_file` if needed) → Linear comment + ready for review |
+| Close-out  | `git push` → `gh pr create` (mandatory when there are commits to ship) |
+| Linear     | `save_issue` / `save_comment` (Figma link, then PR link) |
 
 ## Troubleshooting
 
