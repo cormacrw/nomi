@@ -15,7 +15,7 @@ One row per Stitch workspace or project. Add a row when you create a new project
 
 - **`FRND-07` People (friends list, empty) — canonical:** **“FRND-07 People (Clean Header)”** — `b9f7b3961bb54fac8d57a26156e43aec`. Same **clean header** rule as NAV-01. Session: `12653398914178613375`.
 
-- **`FRND-07` People (with sample data) — variant:** **“NOMI — People (sample list)”** — `e9e0321f4ecc46d7b3b17df8976bce7d`. ~5–6 rows: initials avatars, demo names (e.g. Maya Chen, Jordan Lee), subtle “Friend” line; **1560×3376**. Session: `8399711760043486094`.
+- **`FRND-07` People (with sample data) — canonical:** **“FRND-07 People (sample list) — fixed”** — `cb49b36fe47a4109b839e2f4cc74f9c1`. Rebuilt from **Clean Header** base: **large** type and rows, **no** dark header band, footer tabs match shell scale. Session: `7763087142401890063`. (Superseded rough gen: `e9e0321f4ecc46d7b3b17df8976bce7d`, session `8399711760043486094` — delete in Stitch if unused.)
 
 - **Superseded:** NAV-01 **Super Green Refined** — `24267fcade634b8bb472f1f411b7451c` (distinct header strip). FRND-07 earlier — `250791c96c51471bbdefffb70f671843`. Older NAV-01 variants — `74f915e81…`, `990b18e1…`. Delete in Stitch UI if unused.
 
