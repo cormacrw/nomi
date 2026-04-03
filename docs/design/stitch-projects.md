@@ -4,18 +4,20 @@ One row per Stitch workspace or project. Add a row when you create a new project
 
 | Project name | Link or ID | Scope (flows / screen IDs) | Status | Owner | Last updated |
 | ------------ | ---------- | -------------------------- | ------ | ----- | ------------ |
-| Nomi — Auth MVP | `18104376503220593266` (Stitch project id; open in Google Stitch) | `AUTH-*`, **`NAV-01`**, **`FRND-07`** (People empty) — bold full-bleed emerald; 4-tab nav; **780×1688** logical (1560×3376 @2×), no scroll | In review | — | 2026-04-03 |
+| Nomi — Auth MVP | `18104376503220593266` (Stitch project id; open in Google Stitch) | `AUTH-*`, **`NAV-01`**, **`FRND-07`** (People empty + **with sample friends**) — bold full-bleed emerald; 4-tab nav; **780×1688** logical (1560×3376 @2×), no scroll | In review | — | 2026-04-03 |
 | *(example)* Nomi — MVP shell | `https://…` or internal id | MVP frames per [mvp.md](../product/screens/mvp.md); e.g. `AUTH-*`, `FEED-*` | Draft | — | — |
 
 **Nomi — Auth MVP — canonical frames:**
 
 - **Auth (Consistent Header)** — **1560×3376**: `aa6a979a38e74dda9ffb258b3d312750` (AUTH-01), `b0ea02f0dddc4dc1b6f992c3e5aff475` (AUTH-02), `31803516f521402c86b441b8faa4835c` (AUTH-03), `0d5c14e40ac94b618b5ca40b27f6c533` (AUTH-04). Session: `8824432112178061346`.
 
-- **`NAV-01` App shell (Feed) — canonical:** **“NAV-01 App shell (Super Green Refined)”** — `24267fcade634b8bb472f1f411b7451c`. Full-bleed emerald; **header = centered title only** (no avatar, menu, or header actions); **all section switching and Create from the bottom tab bar only**. Inverse pill CTA; 4-tab **Feed** · **People** · **Create** · **You**. Session: `16599957174888968314`. Target **standard frame** **780×1688** logical (**1560×3376** @2×), no scroll — confirm in Stitch if export metadata differs.
+- **`NAV-01` App shell (Feed) — canonical:** **“NAV-01 Feed (Clean Header)”** — `84455a0623b04ee6aa439d0afeb5bae7`. Full-bleed emerald **without** a darker header band — **title floats on same green** as body; footer-only nav; inverse pill CTA; 4-tab bar. Session: `12653398914178613375`.
 
-- **`FRND-07` People (friends list, empty) — canonical:** **“NOMI — FRND-07 People (empty)”** — `250791c96c51471bbdefffb70f671843`. Same shell: **People** tab selected; empty state + **“Add someone by phone”** inverse CTA; title-only header. Session: `2599176261087574947`.
+- **`FRND-07` People (friends list, empty) — canonical:** **“FRND-07 People (Clean Header)”** — `b9f7b3961bb54fac8d57a26156e43aec`. Same **clean header** rule as NAV-01. Session: `12653398914178613375`.
 
-- **Superseded for NAV-01:** **“Super Green”** with header chrome — `74f915e81ab84ac28882761ff6080316` (session `9022681122729880110`). Light-canvas variant — `990b18e1c0b14178aff678107e159890` (session `6363684422371864630`). Delete in Stitch UI if unused.
+- **`FRND-07` People (with sample data) — variant:** **“NOMI — People (sample list)”** — `e9e0321f4ecc46d7b3b17df8976bce7d`. ~5–6 rows: initials avatars, demo names (e.g. Maya Chen, Jordan Lee), subtle “Friend” line; **1560×3376**. Session: `8399711760043486094`.
+
+- **Superseded:** NAV-01 **Super Green Refined** — `24267fcade634b8bb472f1f411b7451c` (distinct header strip). FRND-07 earlier — `250791c96c51471bbdefffb70f671843`. Older NAV-01 variants — `74f915e81…`, `990b18e1…`. Delete in Stitch UI if unused.
 
 **Global rule:** Core app screens use **bold green canvas**, not light parchment — see [branding](../product/branding.md) and [decision 0001](decisions/0001-bold-green-canvas-all-core-screens.md).
 
