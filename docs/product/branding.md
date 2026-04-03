@@ -8,6 +8,8 @@ Context for visual design, copy, and UI—including tools such as **Google Stitc
 
 **Screens**: Frame names and flows should align with [screens/inventory.md](screens/inventory.md) IDs (e.g. `AUTH-02`, `FEED-01`) when generating UI in Stitch or Figma.
 
+**Canonical Figma (MVP):** [Nomi — MVP](https://www.figma.com/design/r8lrrpXwY1W6yL0kV4eB6d) — single source of truth for product UI (pages, sections by screen group, and the design library).
+
 ---
 
 ## Brand essence
