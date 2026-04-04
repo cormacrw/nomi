@@ -31,7 +31,16 @@ One row per Stitch workspace or project. Add a row when you create a new project
   **Prompt — `FEED-02` Post detail**  
   *FEED-02 Post detail: full-screen on same emerald canvas; back affordance top-left; author row; **multi-photo** area with swipeable carousel (dots), up to 5 photos; full caption; reaction affordance consistent with feed. For `FEED-03`/`FEED-04` product modes: show **friend** view (react + no others’ reaction list) vs **author** view (who reacted summary) as a small segmented note or subtitle — or generate two labeled variants. Title: FEED-02 Post detail.*
 
-  After generation, add **canonical frame ids** and session ids to this section (same pattern as NAV-01 / FRND-07).
+  **Canonical frames (NOM-54, generated 2026-04-03):**
+
+  | Screen | Stitch screen id | Session id |
+  | ------ | ---------------- | ---------- |
+  | **FEED-01 Home (filled)** | `c8ead7255e414cfb98aeffa1895e6e01` | `3784742257647662720` |
+  | **FEED-02 Post detail** (`FEED-03` / `FEED-04` modes via segmented control) | `90dfd161703642a8832be1867f2cc041` | `15212239764316721281` |
+  | **FEED-01 Home (loading)** | `44533363b8864fd4a9a1bc708ed7e8eb` | `13229400848542984050` |
+  | **FEED-01 Home (empty)** | `3f5824e7a36f4b69b209ed58afe87da1` | `16123406971353446521` |
+
+  *Note:* Generations use the project’s current **High-Chroma Emerald Immersion** design system (dark emerald canvas, Epilogue + Manrope). This aligns with full-bleed green direction; older **NAV-01** (`84455a0623b04ee6aa439d0afeb5bae7`) is lighter — reconcile in Stitch if you need pixel continuity with that exact frame.
 
 - **Superseded:** NAV-01 **Super Green Refined** — `24267fcade634b8bb472f1f411b7451c` (distinct header strip). FRND-07 earlier — `250791c96c51471bbdefffb70f671843`. Older NAV-01 variants — `74f915e81…`, `990b18e1…`. Delete in Stitch UI if unused.
 
