@@ -13,7 +13,7 @@ description: >-
 
 Linear issue → worktree → **deliverables** → **PR** → Linear.
 
-Requires **Linear MCP**, **git**, **GitHub CLI (`gh`)** authenticated to the repo, and **cursor-app-control** MCP for `move_agent_to_root` when switching the agent workspace. **Figma MCP** (and loading the **figma-use** skill before `use_figma`) when the issue is design work in Figma.
+Requires **Linear MCP**, **git**, **GitHub CLI (`gh`)** authenticated to the repo. **cursor-app-control** MCP is optional for `move_agent_to_root` — see *Limitations → move_agent_to_root* (moving workspace usually **drops** other MCPs). **Figma MCP** (and loading the **figma-use** skill before `use_figma`) when the issue is design work in Figma. **user-stitch** (or similar) when generating in Google Stitch.
 
 ## Linear ↔ GitHub
 
@@ -28,6 +28,27 @@ Still put the **Linear issue URL** in the PR body so reviewers and automation bo
 ## Limitations (important)
 
 - **Composer / chat title:** There is **no API** in Cursor MCP to rename the chat. Instruct the user to **rename the chat manually** to: `` `{ISSUE_KEY} — {issue title}` `` (example: `NOM-1 — Research: choose implementation stack`).
+
+### Do **not** use `move_agent_to_root` by default (MCP + tooling)
+
+Switching the agent workspace to a **git worktree path** creates a **different Cursor project** than the main repo folder. MCP servers (Linear, Stitch, Figma, etc.) are typically attached to the project/workspace you opened first; after `move_agent_to_root`, the bridge often only exposes **built-in** servers (e.g. `cursor-app-control`, browser) — so **Linear, user-stitch, and similar tools disappear** for that chat. That makes the workflow useless for issue-driven work that needs those MCPs.
+
+**Default pattern:** Keep the workspace root on the **main clone** (or whichever folder still has full MCP). Do all git work against the worktree using an absolute path, for example:
+
+```bash
+WT_PATH='/abs/path/to/nomi-worktrees/NOM-54'
+git -C "$WT_PATH" status
+git -C "$WT_PATH" add -A && git -C "$WT_PATH" commit -m '…'
+git -C "$WT_PATH" push -u origin HEAD
+```
+
+Open files in the worktree via path when needed, or add the worktree folder to the workspace **without** moving the agent root, if your client supports multi-root.
+
+**When to move:** Only if the user explicitly wants the default cwd and file tree rooted in the worktree **and** accepts that this chat may lose third-party MCP until Cursor wires the same servers to that folder (or the user re-opens the worktree as the primary project with MCP enabled there).
+
+### `gh` in the agent
+
+`gh pr create` may fail if the CLI is not logged in in that environment, or if the command runs in a **sandbox** without access to the user’s keychain. Re-run with **full permissions** (`all`) / outside sandbox, or set `GH_TOKEN`, or create the PR from the GitHub UI.
 
 ## Phase A — Start work from issue key
 
@@ -58,7 +79,7 @@ User provides **issue key** (e.g. `NOM-1`).
 
 4. **Mark issue in progress** — `save_issue` with `id` = issue key, `state` = `In Progress` (team must match the issue’s team, e.g. `Nomi`).
 
-5. **Move agent (optional)** — If the user wants this session on the worktree: call **cursor-app-control** `move_agent_to_root` with `rootPath` = the absolute `WT_PATH`.
+5. **Move agent (usually skip)** — **Do not** call `move_agent_to_root` unless the user explicitly chooses isolation over MCP (see *Limitations*). Prefer staying on the main repo workspace and using `git -C "$WT_PATH"` for commits/push.
 
 6. **Chat title** — Tell the user to rename the chat to `` `{ISSUE_KEY} — {title}` ``.
 
@@ -123,7 +144,7 @@ Run from **inside the worktree** directory when there is **anything to ship in g
 
 If the team’s workflow uses different status names, use `list_issue_statuses` with the issue’s team and pick the closest match.
 
-**MCP note:** If `call_mcp_tool` fails for Linear or Figma with “server not available,” retry after a moment, confirm **Settings → MCP** shows the server connected, or complete the step manually in Linear/Figma. The agent’s MCP bridge can lag at session start.
+**MCP note:** If `call_mcp_tool` fails for Linear or Figma with “server not available,” retry after a moment, confirm **Settings → MCP** shows the server connected, or complete the step manually in Linear/Figma. The agent’s MCP bridge can lag at session start. If MCP vanished after **`move_agent_to_root`**, revert strategy: open a new chat with workspace on the **main repo** and continue using `git -C` to the worktree, or add MCP to the worktree project in Cursor settings.
 
 ## Quick reference
 
@@ -132,7 +153,7 @@ If the team’s workflow uses different status names, use `list_issue_statuses` 
 | Load issue | Linear `get_issue` |
 | Branch     | `feature/{lowercase issue key}` e.g. `feature/nom-1` |
 | Worktree   | `git fetch` → `git worktree add` (see Phase A) |
-| Agent root | `move_agent_to_root` with absolute `WT_PATH` |
+| Agent root | **Avoid** `move_agent_to_root` if you need Linear/Stitch/other MCP; use `git -C "$WT_PATH"` from main workspace |
 | Design     | figma-use → `use_figma` (and `create_new_file` if needed) → Linear comment + ready for review |
 | Close-out  | `git push` → `gh pr create` (mandatory when there are commits to ship) |
 | Linear     | `save_issue` / `save_comment` (Figma link, then PR link) |
