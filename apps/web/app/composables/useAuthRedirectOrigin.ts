@@ -1,8 +1,7 @@
 /**
  * Origin for Supabase magic-link redirects (`emailRedirectTo`).
- * - `NUXT_PUBLIC_SITE_URL` when set (staging / preview)
- * - dev server: current browser origin (usually localhost)
- * - production: https://nomisocial.xyz
+ * Prefer `runtimeConfig.public.siteUrl` (set in nuxt.config for prod builds).
+ * Local dev without env: use the current origin.
  */
 export function useAuthRedirectOrigin () {
   const config = useRuntimeConfig()
@@ -10,10 +9,10 @@ export function useAuthRedirectOrigin () {
   if (configured) {
     return configured
   }
+  if (import.meta.dev && import.meta.client) {
+    return window.location.origin
+  }
   if (import.meta.dev) {
-    if (import.meta.client) {
-      return window.location.origin
-    }
     return 'http://localhost:3000'
   }
   return 'https://nomisocial.xyz'

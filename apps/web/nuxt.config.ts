@@ -1,9 +1,22 @@
+function publicSiteUrl () {
+  const raw = (process.env.NUXT_PUBLIC_SITE_URL || '').trim().replace(/\/$/, '')
+  const prod = process.env.NODE_ENV === 'production'
+  if (prod) {
+    // Never ship localhost from a prod build (bad Vercel env copy/paste, etc.)
+    if (!raw || raw.includes('localhost') || raw.includes('127.0.0.1')) {
+      return 'https://nomisocial.xyz'
+    }
+    return raw
+  }
+  return raw
+}
+
 export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   modules: ['@nuxtjs/tailwindcss', '@nuxtjs/supabase'],
   runtimeConfig: {
     public: {
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || '',
+      siteUrl: publicSiteUrl(),
     },
   },
   routeRules: {
