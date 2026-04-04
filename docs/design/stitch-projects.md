@@ -47,27 +47,31 @@ One row per Stitch workspace or project. Add a row when you create a new project
   **Prompt — `POST-01` Composer entry**  
   *POST-01 Composer entry — Nomi social iOS mobile vertical frame (~780×1688 logical). Match NAV-01 Feed Clean Header: full-bleed BRIGHT emerald #00875A / #006b47 — NOT dark forest green #001209; NO separate darker header band — “Home” title + profile avatar top; feed with sample posts. Bottom tab bar with Create emphasized; inverse pill “New post”. Frame title: “POST-01 Composer entry”.*
 
+  **Wizard header (POST-02–POST-04):** One row on emerald: back chevron left; **single centered title** in white (~18pt semibold) — “New post” (picker + upload error), “Caption” (caption), “Review” (review). No extra header band, logos, or tabs.
+
   **Prompt — `POST-02` Pick media**  
-  *POST-02 Pick media — top bar back + “New post”; 3-column grid; 3 photos selected with order badges and reorder grips; “+” tile; “3 of 5”; bottom “Next” inverse pill. Frame title: “POST-02 Pick media”.*
+  *POST-02 — clean header above; 3-column grid; 3 photos with order badges + reorder; “+” tile; “3 of 5”; bottom “Next” inverse pill.*
 
   **Prompt — `POST-03` Caption**  
-  *POST-03 — “Write caption”; horizontal thumbnails; multiline field (cream/mint fill); character hint; “Next”. Frame title: “POST-03 Caption”.*
+  *POST-03 — same header; thumbnails row; **inline caption** — body text on emerald, no cream form card; placeholder / sample lines; quiet “0 / 280” corner; “Next” pill.*
 
   **Prompt — `POST-04` Review / publish**  
-  *POST-04 — “Review”; carousel + caption; “Visible to friends”; “Edit” + “Publish”. Frame title: “POST-04 Review / publish”.*
+  *POST-04 — “Review”; carousel + caption; “Visible to friends”; “Edit” + “Publish”.*
 
   **Prompt — `POST-04` Upload failed**  
-  *POST-04 Upload failed — error banner; partial progress; Retry inverse pill; Save draft / Cancel secondary. Frame title: “POST-04 Upload failed”.*
+  *POST-04 — error banner; partial progress; Retry; Save draft / Cancel.*
 
   **Canonical frames (NOM-55):**
 
   | Screen | Stitch screen id | Session id |
   | ------ | ---------------- | ---------- |
   | **POST-01 Composer entry** | `c9d7fbd7ea4c43c7b2a77552eb033041` | `7463950028279651390` |
-  | **POST-02 Pick media** | `94c9c36a177a4188bf52e2af30941597` | `5013902822817670774` |
-  | **POST-03 Caption** | `e586ff5089c64e8eac7b99078819d25b` | `8447573372961355567` |
-  | **POST-04 Review / publish** | `5dfae4db2ac84eff928171441eb02890` | `13463107849875307933` |
-  | **POST-04 Upload failed** | `93d117366c4f4a4c8bab22c6f5599370` | `10743802390995668484` |
+  | **POST-02 Pick media** | `57dea91f8b484fcab5dcbcece71dcc74` | `12628674047138994381` |
+  | **POST-03 Caption (inline)** | `a0cadc4ddaf14e358f0a3f7655849e50` | `3470613539111573807` |
+  | **POST-04 Review / publish** | `394fc084aeb54728a57b77d110729ca6` | `12628674047138994381` |
+  | **POST-04 Upload failed** | `cbe4707a1eec4938b4534c5886093c38` | `12628674047138994381` |
+
+  **Superseded (earlier NOM-55 passes):** `94c9c36a177a4188bf52e2af30941597`, `e586ff5089c64e8eac7b99078819d25b`, `5dfae4db2ac84eff928171441eb02890`, `93d117366c4f4a4c8bab22c6f5599370` — delete in Stitch if unused.
 
   *Note:* Judge PNGs against NAV-01 brightness; Stitch metadata may still list dark `surface` tokens.
 
