@@ -1,0 +1,6 @@
+# Per-issue git worktrees live at worktrees/<ISSUE_KEY>/ (inside repo for tooling access).
+# Do NOT add `worktrees/` here — it would ignore the whole checkout and break commits from the worktree.
+worktrees/**/.DS_Store
+
+node_modules/
+**/.env.local
