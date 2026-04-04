@@ -33,16 +33,17 @@ Still put the **Linear issue URL** in the PR body so reviewers and automation bo
 
 Switching the agent workspace to a **git worktree path** creates a **different Cursor project** than the main repo folder. MCP servers (Linear, Stitch, etc.) are typically attached to the project/workspace you opened first; after `move_agent_to_root`, the bridge often only exposes **built-in** servers (e.g. `cursor-app-control`, browser) — so **Linear, user-stitch, and similar tools disappear** for that chat. That makes the workflow useless for issue-driven work that needs those MCPs.
 
-**Default pattern:** Keep the workspace root on the **main clone** (or whichever folder still has full MCP). Do all git work against the worktree using an absolute path, for example:
+**Default pattern:** Keep the workspace root on the **main clone** (or whichever folder still has full MCP). Create worktrees **inside the repo** under `worktrees/<ISSUE_KEY>/` so the agent shares one workspace root (read/write, `git -C`, sandbox) without paths outside the project. **Do not** add a blanket `worktrees/` line to `.gitignore` — it would ignore the checkout and break `git add` / commits from the worktree; only ignore cruft (see repo `.gitignore`). Example:
 
 ```bash
-WT_PATH='/abs/path/to/nomi-worktrees/NOM-54'
+REPO="$(git rev-parse --show-toplevel)"
+WT_PATH="$REPO/worktrees/NOM-54"
 git -C "$WT_PATH" status
 git -C "$WT_PATH" add -A && git -C "$WT_PATH" commit -m '…'
 git -C "$WT_PATH" push -u origin HEAD
 ```
 
-Open files in the worktree via path when needed, or add the worktree folder to the workspace **without** moving the agent root, if your client supports multi-root.
+Open files under `worktrees/…` from the same project root when needed, or add the worktree path to the workspace **without** moving the agent root, if your client supports multi-root.
 
 **When to move:** Only if the user explicitly wants the default cwd and file tree rooted in the worktree **and** accepts that this chat may lose third-party MCP until Cursor wires the same servers to that folder (or the user re-opens the worktree as the primary project with MCP enabled there).
 
@@ -58,14 +59,13 @@ User provides **issue key** (e.g. `NOM-1`).
 
 2. **Set branch name** — `BRANCH="feature/$(echo "$ISSUE_KEY" | tr '[:upper:]' '[:lower:]')"` so the identifier matches the issue key (e.g. `feature/nom-1`).
 
-3. **Create worktree** — Run from the **main repository** (not inside another worktree). Substitute `ISSUE_KEY`, `BRANCH`, and set `WT_PATH` to a **new** empty path. Default layout: sibling folder `nomi-worktrees` next to the repo root, one directory per issue so parallel runs do not collide.
+3. **Create worktree** — Run from the **main repository** (not inside another worktree). Substitute `ISSUE_KEY`, `BRANCH`, and set `WT_PATH` to a **new** empty path. Default layout: **`worktrees/<ISSUE_KEY>/`** under the repo root, one directory per issue so parallel runs do not collide and the agent keeps normal workspace access to paths and git.
 
    ```bash
    cd "$(git rev-parse --show-toplevel)"
    ISSUE_KEY='NOM-1'                       # replace with actual key
    BRANCH="feature/$(echo "$ISSUE_KEY" | tr '[:upper:]' '[:lower:]')"
-   PARENT="$(cd .. && pwd)"
-   WT_PATH="$PARENT/nomi-worktrees/$ISSUE_KEY"
+   WT_PATH="$(pwd)/worktrees/$ISSUE_KEY"
    mkdir -p "$(dirname "$WT_PATH")"
    git fetch origin --prune
    ```
@@ -83,7 +83,7 @@ User provides **issue key** (e.g. `NOM-1`).
 
 6. **Chat title** — Tell the user to rename the chat to `` `{ISSUE_KEY} — {title}` ``.
 
-**Parallel runs:** Each issue should use a **distinct** `WT_PATH` (e.g. different `ISSUE_KEY` folder under `nomi-worktrees`).
+**Parallel runs:** Each issue should use a **distinct** `WT_PATH` (e.g. different `ISSUE_KEY` folder under `worktrees/`).
 
 ## Design / Google Stitch issues (before Phase B)
 
@@ -149,7 +149,7 @@ If the team’s workflow uses different status names, use `list_issue_statuses` 
 |------------|--------|
 | Load issue | Linear `get_issue` |
 | Branch     | `feature/{lowercase issue key}` e.g. `feature/nom-1` |
-| Worktree   | `git fetch` → `git worktree add` (see Phase A) |
+| Worktree   | `git fetch` → `git worktree add` under `worktrees/<ISSUE_KEY>/` (inside repo; see Phase A) |
 | Agent root | **Avoid** `move_agent_to_root` if you need Linear/Stitch/other MCP; use `git -C "$WT_PATH"` from main workspace |
 | Design     | `user-stitch`: project id → `generate_screen_from_text` / `edit_screens` (see tool schemas) → Linear comment + ready for review |
 | Close-out  | `git push` → `gh pr create` (mandatory when there are commits to ship) |
@@ -160,3 +160,4 @@ If the team’s workflow uses different status names, use `list_issue_statuses` 
 - **`gh` not found:** Install [GitHub CLI](https://cli.github.com/) and `gh auth login`.
 - **Worktree path exists:** Remove old tree with `git worktree remove <path>` (from main repo) and delete the folder if needed, or use a different `WT_PATH`.
 - **Branch already checked out elsewhere:** Another worktree holds that branch; use one worktree per branch or remove the other checkout.
+- **Older sibling-folder layout:** If you still have worktrees under a path outside the repo (e.g. `../nomi-worktrees/`), remove them with `git worktree remove` and recreate under `worktrees/<ISSUE_KEY>/` inside the repo so tooling can access them.
