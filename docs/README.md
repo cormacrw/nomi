@@ -15,7 +15,7 @@ Canonical planning specs for **Nomi** (working name). Implementation code will l
 9. **[Requirements](product/requirements.md)** — numbered requirements (draft).
 10. **[Stack constraints](stack/constraints.md)** — hard/soft technical boundaries.
 11. **[Stack options](stack/options.md)** — brainstorm before ADRs.
-12. **[Architecture decisions](stack/decisions/)** — ADRs (`0000` template, `0001` process).
+12. **[Architecture decisions](stack/decisions/)** — ADRs (`0000` template, `0001` process, `0002` Phase 1 stack).
 13. **[Phases](implementation/phases.md)** → **[Milestones](implementation/milestones.md)** → **[Risks and open questions](implementation/risks-and-open-questions.md)**.
 14. **[Legal / privacy](legal-privacy/)** — data handling and third parties (draft).
 

@@ -7,10 +7,10 @@ Hard or soft constraints that narrow stack choices. Update as the project commit
 - **Phone verification** implies SMS or voice-capable providers; regional availability and cost vary by country.
 - **Privacy**: phone numbers and message metadata are sensitive; minimize retention and access (see [../legal-privacy/](../legal-privacy/)).
 
-## Delivery (TBD)
+## Delivery
 
-- Mobile-first vs web-first vs both — decide before major client stack choices.
-- Target regions for launch (affects SMS, language, compliance).
+- **Phase 1**: **Web app first** on **Supabase** — see [ADR 0002](decisions/0002-phase-1-stack-supabase-and-web.md). Native clients are out of scope for Phase 1 delivery order; plan later shells against the same backend.
+- **Target regions for launch** (affects SMS, language, compliance) — still TBD; update here when chosen.
 
 ## Operational
 
