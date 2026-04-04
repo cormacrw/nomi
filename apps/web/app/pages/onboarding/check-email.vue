@@ -1,6 +1,5 @@
 <script setup>
 const supabase = useSupabaseClient()
-const config = useRuntimeConfig()
 
 const pending = ref('')
 const resending = ref(false)
@@ -22,8 +21,7 @@ async function resend () {
   resendMsg.value = ''
   resending.value = true
   try {
-    const origin = (config.public.siteUrl || '').replace(/\/$/, '') || window.location.origin
-    const redirectTo = `${origin}/auth/confirm`
+    const redirectTo = `${useAuthRedirectOrigin()}/auth/confirm`
     const { error } = await supabase.auth.signInWithOtp({
       email: pending.value,
       options: { emailRedirectTo: redirectTo },
