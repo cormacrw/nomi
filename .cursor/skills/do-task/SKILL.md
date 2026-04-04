@@ -3,17 +3,17 @@ name: do-task
 description: >-
   Starts work from a Linear issue key using an isolated git worktree, optionally
   moves the agent to that root, completes the task, opens a GitHub PR (mandatory
-  close-out when there is anything to ship), and syncs Linear. Design/Figma issues:
-  create or update the Figma file (e.g. new page), then mark Linear ready for review,
-  then PR. Use when the user says do-task, gives an issue id (e.g. NOM-12), wants
-  parallel worktrees per issue, or says worktree / Linear / PR workflow.
+  close-out when there is anything to ship), and syncs Linear. Design / Google Stitch
+  issues: create or update screens in the Stitch project, then mark Linear ready for
+  review, then PR. Use when the user says do-task, gives an issue id (e.g. NOM-12),
+  wants parallel worktrees per issue, or says worktree / Linear / PR workflow.
 ---
 
 # do-task
 
 Linear issue → worktree → **deliverables** → **PR** → Linear.
 
-Requires **Linear MCP**, **git**, **GitHub CLI (`gh`)** authenticated to the repo. **cursor-app-control** MCP is optional for `move_agent_to_root` — see *Limitations → move_agent_to_root* (moving workspace usually **drops** other MCPs). **Figma MCP** (and loading the **figma-use** skill before `use_figma`) when the issue is design work in Figma. **user-stitch** (or similar) when generating in Google Stitch.
+Requires **Linear MCP**, **git**, **GitHub CLI (`gh`)** authenticated to the repo. **cursor-app-control** MCP is optional for `move_agent_to_root` — see *Limitations → move_agent_to_root* (moving workspace usually **drops** other MCPs). **user-stitch** MCP for design work in **Google Stitch** (read each tool’s schema under the MCP descriptors before calling).
 
 ## Linear ↔ GitHub
 
@@ -31,7 +31,7 @@ Still put the **Linear issue URL** in the PR body so reviewers and automation bo
 
 ### Do **not** use `move_agent_to_root` by default (MCP + tooling)
 
-Switching the agent workspace to a **git worktree path** creates a **different Cursor project** than the main repo folder. MCP servers (Linear, Stitch, Figma, etc.) are typically attached to the project/workspace you opened first; after `move_agent_to_root`, the bridge often only exposes **built-in** servers (e.g. `cursor-app-control`, browser) — so **Linear, user-stitch, and similar tools disappear** for that chat. That makes the workflow useless for issue-driven work that needs those MCPs.
+Switching the agent workspace to a **git worktree path** creates a **different Cursor project** than the main repo folder. MCP servers (Linear, Stitch, etc.) are typically attached to the project/workspace you opened first; after `move_agent_to_root`, the bridge often only exposes **built-in** servers (e.g. `cursor-app-control`, browser) — so **Linear, user-stitch, and similar tools disappear** for that chat. That makes the workflow useless for issue-driven work that needs those MCPs.
 
 **Default pattern:** Keep the workspace root on the **main clone** (or whichever folder still has full MCP). Do all git work against the worktree using an absolute path, for example:
 
@@ -85,27 +85,24 @@ User provides **issue key** (e.g. `NOM-1`).
 
 **Parallel runs:** Each issue should use a **distinct** `WT_PATH` (e.g. different `ISSUE_KEY` folder under `nomi-worktrees`).
 
-## Design / Figma issues (before Phase B)
+## Design / Google Stitch issues (before Phase B)
 
-Use this branch when the issue is **product UI in Figma** (new file, new page, frames, tokens)—not code-only refactors. Signals: label (e.g. Design / Figma), description mentions Figma, title contains “Figma”, or the user says it is a design task.
+Use this branch when the issue is **product UI in Google Stitch** (new screens, edits, variants)—not code-only refactors. Signals: label (e.g. Design / Stitch), description mentions Stitch, title contains “Stitch”, or the user says it is a design task.
 
-1. **Canonical file** — Obtain **`fileKey`** for the Nomi MVP file (from the issue description/link, project docs, or ask once). URLs look like `https://www.figma.com/design/{fileKey}/…`.
+1. **Project** — Obtain the Stitch **`projectId`** (numeric id, no `projects/` prefix) from the issue description/link, project docs, or **`list_projects`** / **`get_project`** on **`user-stitch`**. If the issue starts a new effort, **`create_project`** may be appropriate; read the tool schema first.
 
-2. **Load figma-use** — Read the **figma-use** skill (project or Cursor plugin path) **before** any `use_figma` call.
+2. **Generate or edit** — Use **`user-stitch`** tools (check descriptors before each call):
+   - **New screen from prompt:** `generate_screen_from_text` with `projectId`, `prompt`, and optional `deviceType` (`MOBILE`, `DESKTOP`, etc.). Generation can take **several minutes**; do **not** blindly retry—if the call errors on connection, `get_screen` may still show progress later per tool notes.
+   - **Iterate:** `list_screens` → `edit_screens` with `projectId`, `selectedScreenIds`, and `prompt`.
+   - **Variants / design system:** `generate_variants`, `list_design_systems`, `apply_design_system`, etc., when the issue asks for those—match tool names to the issue.
 
-3. **Create or update in Figma** — Use **Figma MCP `use_figma`** with Plugin API code, for example:
-   - **New page:** `const page = figma.createPage(); page.name = '…';` (name from issue: area, screen group, or slug from title).
-   - **New file:** If the issue is “create the MVP file,” use `create_new_file` (with `planKey` from `whoami`) **then** `use_figma` in that file.
+3. **Link back to Linear** — `save_comment` on the issue with the Stitch **project id** (`projects/{id}` style if you return resource names) and any **browser URL** the team uses to open the project in Google Stitch (copy from Stitch UI when needed). Update `save_issue` **description** only if your team keeps the canonical project link there.
 
-   Keep pages aligned with screen groups when the issue asks for structure (Shell, Auth, Feed, etc.).
+4. **Mark ready for review** — `save_issue` with `id` = issue key, `state` = the team’s **“Ready for review”** / **“In Review”** / **“Done”** (design sign-off), whichever matches your workflow. Use `list_issue_statuses` with the issue’s team and pick the closest match. Prefer a state that means *design is ready for review*, not only “code PR open”—that distinction is team-specific.
 
-4. **Link back to Linear** — `save_comment` on the issue with the **Figma URL** (file or specific page/frame node link). Update `save_issue` **description** only if your team pastes the canonical file link there.
+5. **Repo work** — If the issue requires doc updates (inventory, branding link, screen checklist), commit those in the worktree **before** Phase B so the PR includes them.
 
-5. **Mark ready for review** — `save_issue` with `id` = issue key, `state` = the team’s **“Ready for review”** / **“In Review”** / **“Done”** (design sign-off), whichever matches your workflow. Use `list_issue_statuses` with the issue’s team and pick the closest match. Prefer a state that means *design is ready for review*, not only “code PR open”—that distinction is team-specific.
-
-6. **Repo work** — If the issue requires doc updates (inventory, branding link, screen checklist), commit those in the worktree **before** Phase B so the PR includes them.
-
-**Order:** Figma deliverable → comment with link → Linear status (ready for review) → **then** Phase B (PR). If the issue is purely Figma with **no** repo changes, still run Phase B only when there is at least one commit (e.g. a one-line doc link); if the user explicitly wants no git change, skip PR and document that exception.
+**Order:** Stitch deliverable → comment with project reference (and link if available) → Linear status (ready for review) → **then** Phase B (PR). If the issue is purely Stitch with **no** repo changes, still run Phase B only when there is at least one commit (e.g. a one-line doc link); if the user explicitly wants no git change, skip PR and document that exception.
 
 ## Phase B — Open PR and update Linear (mandatory close-out)
 
@@ -118,7 +115,7 @@ Run from **inside the worktree** directory when there is **anything to ship in g
    - **Body** (markdown), include at minimum:
      - Link to Linear issue: issue `url` from `get_issue`.
      - Summary of changes (or bullets).
-     - For design issues: **Figma link** (file/page/frame) if not already only in Linear.
+     - For design issues: **Stitch project** reference (id and/or URL) if not already only in Linear.
      - Optional: paste first ~40 lines of issue `description` if helpful for reviewers.
 
    With GitHub linked, Linear usually picks up the PR from the branch/repo; the link in the body still helps reviewers.
@@ -144,7 +141,7 @@ Run from **inside the worktree** directory when there is **anything to ship in g
 
 If the team’s workflow uses different status names, use `list_issue_statuses` with the issue’s team and pick the closest match.
 
-**MCP note:** If `call_mcp_tool` fails for Linear or Figma with “server not available,” retry after a moment, confirm **Settings → MCP** shows the server connected, or complete the step manually in Linear/Figma. The agent’s MCP bridge can lag at session start. If MCP vanished after **`move_agent_to_root`**, revert strategy: open a new chat with workspace on the **main repo** and continue using `git -C` to the worktree, or add MCP to the worktree project in Cursor settings.
+**MCP note:** If `call_mcp_tool` fails for Linear or **user-stitch** with “server not available,” retry after a moment, confirm **Settings → MCP** shows the server connected, or complete the step manually in Linear / Stitch. The agent’s MCP bridge can lag at session start. If MCP vanished after **`move_agent_to_root`**, revert strategy: open a new chat with workspace on the **main repo** and continue using `git -C` to the worktree, or add MCP to the worktree project in Cursor settings.
 
 ## Quick reference
 
@@ -154,9 +151,9 @@ If the team’s workflow uses different status names, use `list_issue_statuses` 
 | Branch     | `feature/{lowercase issue key}` e.g. `feature/nom-1` |
 | Worktree   | `git fetch` → `git worktree add` (see Phase A) |
 | Agent root | **Avoid** `move_agent_to_root` if you need Linear/Stitch/other MCP; use `git -C "$WT_PATH"` from main workspace |
-| Design     | figma-use → `use_figma` (and `create_new_file` if needed) → Linear comment + ready for review |
+| Design     | `user-stitch`: project id → `generate_screen_from_text` / `edit_screens` (see tool schemas) → Linear comment + ready for review |
 | Close-out  | `git push` → `gh pr create` (mandatory when there are commits to ship) |
-| Linear     | `save_issue` / `save_comment` (Figma link, then PR link) |
+| Linear     | `save_issue` / `save_comment` (Stitch reference, then PR link) |
 
 ## Troubleshooting
 
