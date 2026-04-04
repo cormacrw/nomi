@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    @apply m-0 min-h-dvh bg-nomi-emerald font-sans text-nomi-mint;
+  }
+}
+
+@layer components {
+  /* Shared cream fields on emerald (forms, OTP, selects) */
+  .nomi-cream-field {
+    @apply box-border w-full min-h-[3.5rem] rounded-2xl border-0 bg-nomi-mint px-3 font-bold text-nomi-ink shadow-none transition-shadow placeholder:text-nomi-ink/40 focus:outline-none focus:ring-4 focus:ring-white/35 sm:min-h-[4.25rem] sm:px-4 sm:text-lg;
+  }
+
+  .nomi-cream-field-select {
+    @apply nomi-cream-field cursor-pointer appearance-none bg-[length:1.25rem] bg-[right_0.75rem_center] bg-no-repeat pr-10 text-left;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='%2300472d'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  }
+}

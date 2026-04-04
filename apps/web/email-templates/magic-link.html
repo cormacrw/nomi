@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="x-apple-disable-message-reformatting">
+  <title>Sign in to Nomi</title>
+  <!--
+    Supabase Auth (Magic link): paste this HTML into the template editor.
+    Replace the href below with your confirmation URL variable, e.g.:
+      href="{{ .ConfirmationURL }}"
+    Other useful vars: {{ .SiteURL }}, {{ .Email }}
+  -->
+  <!--[if mso]>
+  <noscript>
+    <xml>
+      <o:OfficeDocumentSettings>
+        <o:PixelsPerInch>96</o:PixelsPerInch>
+      </o:OfficeDocumentSettings>
+    </xml>
+  </noscript>
+  <![endif]-->
+</head>
+<body style="margin:0;padding:0;background-color:#004d34;-webkit-font-smoothing:antialiased;">
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;">
+    Sign in to Nomi — tap the button in this email to continue. Link expires for your security.
+  </div>
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background:linear-gradient(165deg,#00875a 0%,#006b47 48%,#004d34 100%);background-color:#00875a;">
+    <tr>
+      <td align="center" style="padding:40px 20px;">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="max-width:560px;margin:0 auto;">
+          <tr>
+            <td style="padding:0 0 28px 0;text-align:center;">
+              <p style="margin:0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;font-weight:700;letter-spacing:0.14em;text-transform:uppercase;color:#e8fff4;opacity:0.85;">
+                Private social
+              </p>
+              <p style="margin:8px 0 0 0;font-family:Georgia,'Times New Roman',serif;font-size:28px;font-weight:800;letter-spacing:-0.03em;color:#ffffff;line-height:1.1;">
+                Nomi
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color:#006b47;border-radius:20px;padding:36px 32px 40px 32px;border:1px solid rgba(255,255,255,0.08);">
+              <h1 style="margin:0 0 12px 0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:22px;font-weight:800;letter-spacing:-0.02em;color:#ffffff;line-height:1.25;">
+                Sign in to Nomi
+              </h1>
+              <p style="margin:0 0 28px 0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:16px;line-height:1.55;color:#e8fff4;opacity:0.92;">
+                You asked for a magic link — no password. Tap the button below on the same device you use for Nomi. If you didn’t request this, you can ignore this email.
+              </p>
+              <!-- Button: cream pill (matches in-app inverse CTAs) -->
+              <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0">
+                <tr>
+                  <td align="center" style="padding:0 0 24px 0;">
+                    <a href="{{ .ConfirmationURL }}" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:16px 36px;font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:17px;font-weight:800;letter-spacing:-0.02em;text-decoration:none;color:#00472d;background-color:#fcf9f2;border-radius:999px;border:1px solid rgba(0,0,0,0.06);box-shadow:0 4px 24px rgba(0,0,0,0.12);">
+                      Open Nomi
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:13px;line-height:1.5;color:#e8fff4;opacity:0.7;">
+                Button not working? Paste this link into your browser:
+              </p>
+              <p style="margin:10px 0 0 0;word-break:break-all;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;line-height:1.45;color:#b1f4d0;">
+                {{ .ConfirmationURL }}
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:28px 8px 0 8px;text-align:center;">
+              <p style="margin:0;font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;font-size:11px;line-height:1.5;color:#e8fff4;opacity:0.45;letter-spacing:0.06em;text-transform:uppercase;">
+                Identity verified · small-circle social
+              </p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
