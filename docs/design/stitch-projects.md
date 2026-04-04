@@ -17,30 +17,34 @@ One row per Stitch workspace or project. Add a row when you create a new project
 
 - **`FRND-07` People (with sample data) — canonical:** **“FRND-07 People (list — v3)”** — `6e8f1c50c9c4465895b685f88abb8f9c`. Rebuilt from **People empty (Clean Header)** with **standard iOS-style list density** (e.g. ~44–48pt avatars, ~17pt names, ~56–60pt rows) — middle ground vs oversized/tiny passes; **no** separate header strip; full-width tab bar. Session: `7428079361130783461`. Prior attempts: `df0f342…` (tuned), `cb49b36…` (fixed), `e9e0321f…` — delete in Stitch if unused.
 
-- **NOM-54 — Home feed & post detail (`FEED-01`–`FEED-04`):** Generate in this project so frames sit next to **`NAV-01` Feed (Clean Header)** (`84455a0623b04ee6aa439d0afeb5bae7`). **Global rule:** full-bleed emerald viewport (**#00875A / #006b47**), **white/cream typography** on the green, post bodies on **elevated light cards** (inverse of the green canvas) — see [decision 0001](decisions/0001-bold-green-canvas-all-core-screens.md). Manrope for titles/author names, Inter for body and meta.
+- **NOM-54 — Home feed & post detail (`FEED-01`–`FEED-04`):** Align visually with **`NAV-01` Feed (Clean Header)** (`84455a0623b04ee6aa439d0afeb5bae7`): **bright** full-bleed emerald (**#00875A / #006b47**), **no** separate darker header band — title and profile float on the **same** green as the feed. **Do not** default the canvas to near-black forest green (#001209); that reads as a different chrome than the shell.
+
+  **Product — reactions (non-negotiable for prompts):** Read [content-and-moderation.md](../product/content-and-moderation.md) § Reactions. Friends **do not** see reaction counts, who reacted, or aggregates. They only get a react affordance and **self-state** (e.g. outlined vs filled heart). **Only the poster** sees who reacted (`FEED-04`); that belongs in author flows — **not** as “likes” in the feed list.
 
   **Prompt — `FEED-01` Home feed (filled)**  
-  *Nomi mobile — FEED-01 Home feed (filled). Match NAV-01 Feed (Clean Header): same full-bleed emerald background, no darker header band, title “Home” or “Nomi” in white, subtle profile icon top-right. Scrollable feed: 3 friend post cards on light elevated surfaces (rounded corners, soft shadow or tonal lift). Each card: avatar, name (Manrope semibold), relative time (Inter caption), one landscape photo placeholder, 2-line caption, reaction row: heart + “You, Alex, Sam” on a **friend’s** post; on **your own** post show poster-visible aggregate like “Loved by 12 friends”. Bottom: same 4-tab bar as NAV-01 with Home active. Screen label: FEED-01 Home (filled).*
+  *FEED-01 Home (filled). Match NAV-01 Clean Header: continuous **bright** emerald #00875A / #006b47 full viewport; “Home” + profile on same plane as feed — no darker header strip. Posts are **editorial on green**: avatar, name, time, photo, caption — **no white card panels** behind whole posts; spacing and typography only; optional rounded photo only. Three sample posts. Reaction: **one** minimal control (heart or “React”) per post — **zero** counts, **zero** names, **zero** “Loved by…”. Show reacted state only as icon filled vs outline. Bottom tab bar matches shell.*
 
   **Prompt — `FEED-01` Loading**  
-  *Same shell as FEED-01 filled; replace feed with skeleton placeholders (shimmer-style gray bars and rounded rects on card-shaped areas). Label: FEED-01 Home (loading).*
+  *Same shell; skeleton placeholders on green — **no** white card-shaped panels; subtle mint/gray-green bars only.*
 
   **Prompt — `FEED-01` Empty**  
-  *Same shell; main area: calm empty illustration or icon, headline “No posts yet”, supporting line about adding friends or checking back, primary button “Find friends” (inverse pill). Label: FEED-01 Home (empty).*
+  *Same shell; empty state + “Find friends” inverse pill.*
 
   **Prompt — `FEED-02` Post detail**  
-  *FEED-02 Post detail: full-screen on same emerald canvas; back affordance top-left; author row; **multi-photo** area with swipeable carousel (dots), up to 5 photos; full caption; reaction affordance consistent with feed. For `FEED-03`/`FEED-04` product modes: show **friend** view (react + no others’ reaction list) vs **author** view (who reacted summary) as a small segmented note or subtitle — or generate two labeled variants. Title: FEED-02 Post detail.*
+  *Carousel + caption; friend view: react + self-state only, no list of reactors; author-only summary is separate (`FEED-04`), not a public like count.*
 
-  **Canonical frames (NOM-54, generated 2026-04-03):**
+  **Canonical frames (NOM-54):**
 
   | Screen | Stitch screen id | Session id |
   | ------ | ---------------- | ---------- |
-  | **FEED-01 Home (filled)** | `c8ead7255e414cfb98aeffa1895e6e01` | `3784742257647662720` |
-  | **FEED-02 Post detail** (`FEED-03` / `FEED-04` modes via segmented control) | `90dfd161703642a8832be1867f2cc041` | `15212239764316721281` |
+  | **FEED-01 Home (filled)** — current | `54c1d819312d4d118810380144a72397` | `16752028322217442920` |
+  | **FEED-02 Post detail** (needs pass for same reaction rules) | `90dfd161703642a8832be1867f2cc041` | `15212239764316721281` |
   | **FEED-01 Home (loading)** | `44533363b8864fd4a9a1bc708ed7e8eb` | `13229400848542984050` |
   | **FEED-01 Home (empty)** | `3f5824e7a36f4b69b209ed58afe87da1` | `16123406971353446521` |
 
-  *Note:* Generations use the project’s current **High-Chroma Emerald Immersion** design system (dark emerald canvas, Epilogue + Manrope). This aligns with full-bleed green direction; older **NAV-01** (`84455a0623b04ee6aa439d0afeb5bae7`) is lighter — reconcile in Stitch if you need pixel continuity with that exact frame.
+  **Superseded (wrong social proof / white cards / dark chrome):** `c8ead7255e414cfb98aeffa1895e6e01`; intermediate edits `f9fc266b3a9d4e53957c52255353389e`. Delete in Stitch if cluttering the canvas.
+
+  *Note:* Stitch’s bundled design system may still attach dark `surface` tokens in metadata; **judge the PNG** against NAV-01 brightness. Tweak in Stitch until the canvas matches the shell reference.
 
 - **Superseded:** NAV-01 **Super Green Refined** — `24267fcade634b8bb472f1f411b7451c` (distinct header strip). FRND-07 earlier — `250791c96c51471bbdefffb70f671843`. Older NAV-01 variants — `74f915e81…`, `990b18e1…`. Delete in Stitch UI if unused.
 
