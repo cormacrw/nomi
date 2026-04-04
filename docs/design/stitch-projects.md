@@ -22,7 +22,7 @@ One row per Stitch workspace or project. Add a row when you create a new project
   **Product — reactions (non-negotiable for prompts):** Read [content-and-moderation.md](../product/content-and-moderation.md) § Reactions. Friends **do not** see reaction counts, who reacted, or aggregates. They only get a react affordance and **self-state** (e.g. outlined vs filled heart). **Only the poster** sees who reacted (`FEED-04`); that belongs in author flows — **not** as “likes” in the feed list.
 
   **Prompt — `FEED-01` Home feed (filled)**  
-  *FEED-01 Home (filled). Match NAV-01 Clean Header: continuous **bright** emerald #00875A / #006b47 full viewport; “Home” + profile on same plane as feed — no darker header strip. Posts are **editorial on green**: avatar, name, time, photo, caption — **no white card panels** behind whole posts; spacing and typography only; optional rounded photo only. Three sample posts. Reaction: **one** minimal control (heart or “React”) per post — **zero** counts, **zero** names, **zero** “Loved by…”. Show reacted state only as icon filled vs outline. Bottom tab bar matches shell.*
+  *FEED-01 Home (filled). Match NAV-01 Clean Header: continuous **bright** emerald #00875A / #006b47 full viewport; “Home” + profile on same plane as feed — no darker header strip. Per post, **vertical order only**: (1) author row — avatar, name, time; (2) **photo carousel** — full-width swipeable multi-photo area with pagination dots **under** the images; (3) **caption paragraph below the carousel** — never overlaid on photos; (4) single react affordance (filled/outline heart). **No white card panels.** **No** counts or names on reactions. Three sample posts. Bottom tab bar matches shell.*
 
   **Prompt — `FEED-01` Loading**  
   *Same shell; skeleton placeholders on green — **no** white card-shaped panels; subtle mint/gray-green bars only.*
@@ -37,12 +37,12 @@ One row per Stitch workspace or project. Add a row when you create a new project
 
   | Screen | Stitch screen id | Session id |
   | ------ | ---------------- | ---------- |
-  | **FEED-01 Home (filled)** — current | `54c1d819312d4d118810380144a72397` | `16752028322217442920` |
+  | **FEED-01 Home (filled)** — current (carousel + caption below) | `8ee302d4b9494bcfaaa606626c1cb636` | `1300973042713177189` |
   | **FEED-02 Post detail** (needs pass for same reaction rules) | `90dfd161703642a8832be1867f2cc041` | `15212239764316721281` |
   | **FEED-01 Home (loading)** | `44533363b8864fd4a9a1bc708ed7e8eb` | `13229400848542984050` |
   | **FEED-01 Home (empty)** | `3f5824e7a36f4b69b209ed58afe87da1` | `16123406971353446521` |
 
-  **Superseded (wrong social proof / white cards / dark chrome):** `c8ead7255e414cfb98aeffa1895e6e01`; intermediate edits `f9fc266b3a9d4e53957c52255353389e`. Delete in Stitch if cluttering the canvas.
+  **Superseded:** earlier passes `c8ead7255e414cfb98aeffa1895e6e01`, `f9fc266b3a9d4e53957c52255353389e`, `54c1d819312d4d118810380144a72397` (caption-on-image / single photo). Delete in Stitch if cluttering the canvas.
 
   *Note:* Stitch’s bundled design system may still attach dark `surface` tokens in metadata; **judge the PNG** against NAV-01 brightness. Tweak in Stitch until the canvas matches the shell reference.
 
