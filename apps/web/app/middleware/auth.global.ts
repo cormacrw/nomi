@@ -1,7 +1,7 @@
 export default defineNuxtRouteMiddleware((to) => {
   const session = useSupabaseSession()
 
-  if (!session.value && to.path === '/home') {
+  if (!session.value && (to.path === '/home' || to.path.startsWith('/home/'))) {
     return navigateTo('/')
   }
 

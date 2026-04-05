@@ -20,6 +20,12 @@ async function signOut () {
     <p class="mb-7 text-[1.0625rem] leading-relaxed text-nomi-mint/85">
       Feed and friends will show up here. You’re signed in.
     </p>
+    <NuxtLink
+      to="/home/post"
+      class="mb-6 inline-flex min-h-[3.75rem] w-full max-w-xs items-center justify-center rounded-full bg-white px-6 font-headline text-[clamp(1.0625rem,3.5vw,1.25rem)] font-black tracking-tight text-nomi-ink shadow-lg shadow-black/10 transition hover:brightness-[1.02] sm:min-h-[5rem]"
+    >
+      New post
+    </NuxtLink>
     <button
       type="button"
       class="rounded-full border border-white/25 bg-transparent px-5 py-2.5 text-[0.9375rem] font-semibold text-nomi-mint/90 transition hover:border-white/40 hover:bg-white/10"
