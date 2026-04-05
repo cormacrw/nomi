@@ -1,4 +1,6 @@
 <script setup>
+import { fileToWebpOrJpeg, MAX_IMAGE_INPUT_BYTES, POST_MAX_LONG_EDGE } from '~/utils/fileToWebp'
+
 const CAPTION_MAX = 280
 const MAX_PHOTOS = 5
 
@@ -14,6 +16,7 @@ const items = ref([])
 const fileInputRef = ref(null)
 const publishing = ref(false)
 const uploadMessage = ref('')
+const pickError = ref('')
 const pendingPostId = ref(null)
 /** @type {import('vue').Ref<Set<number>>} */
 const completedMediaIndices = ref(new Set())
@@ -33,14 +36,25 @@ onUnmounted(() => {
 })
 
 function addFiles (fileList) {
+  pickError.value = ''
   const incoming = Array.from(fileList).filter((f) => f.type.startsWith('image/'))
   const room = MAX_PHOTOS - items.value.length
   const take = incoming.slice(0, Math.max(0, room))
+  let skippedLarge = 0
   for (const file of take) {
+    if (file.size > MAX_IMAGE_INPUT_BYTES) {
+      skippedLarge++
+      continue
+    }
     items.value = [
       ...items.value,
       { id: crypto.randomUUID(), file, url: URL.createObjectURL(file) },
     ]
+  }
+  if (skippedLarge > 0) {
+    pickError.value = skippedLarge === 1
+      ? 'That photo is too large to upload. Choose a smaller file.'
+      : 'Some photos were too large and were skipped.'
   }
 }
 
@@ -178,6 +192,7 @@ function resetWizardState () {
   caption.value = ''
   step.value = 'pick'
   uploadMessage.value = ''
+  pickError.value = ''
   pendingPostId.value = null
   uploadedStoragePaths.value = []
   completedMediaIndices.value = new Set()
@@ -242,7 +257,7 @@ async function publishOrResume () {
 
       uploadMessage.value = `Uploading ${i + 1} of ${files.length}`
 
-      const { blob, mime } = await fileToWebpOrJpeg(files[i])
+      const { blob, mime } = await fileToWebpOrJpeg(files[i], { maxLongEdge: POST_MAX_LONG_EDGE })
       const ext = mime === 'image/webp' ? 'webp' : 'jpg'
       const path = `${postId}/${crypto.randomUUID()}.${ext}`
 
@@ -314,6 +329,13 @@ async function retryUpload () {
     <div v-if="step === 'pick'" class="flex min-h-0 flex-1 flex-col">
       <p class="mb-3 text-center text-sm text-white/70">
         {{ items.length }} of {{ MAX_PHOTOS }}
+      </p>
+      <p
+        v-if="pickError"
+        class="mb-3 rounded-xl border border-nomi-error/50 bg-black/25 px-3 py-2 text-center text-sm text-nomi-error"
+        role="alert"
+      >
+        {{ pickError }}
       </p>
       <div class="grid grid-cols-3 gap-2 sm:gap-3">
         <div

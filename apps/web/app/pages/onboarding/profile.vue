@@ -1,4 +1,6 @@
 <script setup>
+import { fileToWebpOrJpeg, MAX_IMAGE_INPUT_BYTES, AVATAR_MAX_LONG_EDGE } from '~/utils/fileToWebp'
+
 const supabase = useSupabaseClient()
 
 const displayName = ref('')
@@ -48,8 +50,15 @@ onMounted(async () => {
 })
 
 function onPickPhoto (e) {
+  formError.value = ''
   const input = e.target
   const f = input?.files?.[0]
+  if (f && f instanceof File && f.size > MAX_IMAGE_INPUT_BYTES) {
+    formError.value = 'That photo is too large. Choose a smaller file.'
+    photoFile.value = null
+    if (input) input.value = ''
+    return
+  }
   photoFile.value = f ?? null
   if (input) input.value = ''
 }
@@ -80,7 +89,7 @@ async function submit () {
     let avatarUrl = null
     const file = photoFile.value
     if (file && file instanceof File) {
-      const { blob, mime } = await fileToWebpOrJpeg(file)
+      const { blob, mime } = await fileToWebpOrJpeg(file, { maxLongEdge: AVATAR_MAX_LONG_EDGE })
       const ext = mime === 'image/webp' ? 'webp' : 'jpg'
       const path = `${uid}/avatar.${ext}`
       const { error: upErr } = await supabase.storage
