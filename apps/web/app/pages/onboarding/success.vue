@@ -5,6 +5,11 @@ onMounted(async () => {
   const { data: { session } } = await supabase.auth.getSession()
   const uid = session?.user?.id
   if (uid) {
+    const complete = await getProfileSetupComplete(supabase, uid)
+    if (!complete) {
+      await navigateTo('/onboarding/profile')
+      return
+    }
     await syncWelcomeToProfile(supabase, uid)
   }
   await new Promise((r) => setTimeout(r, 900))
@@ -16,7 +21,7 @@ function goHome () {
 }
 
 function goBack () {
-  navigateTo('/onboarding/email')
+  navigateTo('/onboarding/profile')
 }
 </script>
 

@@ -24,7 +24,7 @@ async function goSuccess () {
   }
   finished = true
   signInPhase.value = 'done'
-  await navigateTo('/onboarding/success', { replace: true })
+  await navigateTo('/onboarding/profile', { replace: true })
 }
 
 /** If anything failed after tokens were stored, still complete sign-in */

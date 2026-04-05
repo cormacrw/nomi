@@ -3,7 +3,7 @@ defineProps({
   headerVariant: {
     type: String,
     default: 'auth',
-    validator: (v) => ['welcome', 'auth', 'brand'].includes(v),
+    validator: (v) => ['welcome', 'auth', 'brand', 'profile'].includes(v),
   },
 })
 

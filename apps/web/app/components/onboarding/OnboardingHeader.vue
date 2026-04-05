@@ -3,7 +3,7 @@ defineProps({
   variant: {
     type: String,
     default: 'auth',
-    validator: (v) => ['welcome', 'auth', 'brand'].includes(v),
+    validator: (v) => ['welcome', 'auth', 'brand', 'profile'].includes(v),
   },
 })
 
@@ -16,7 +16,7 @@ const emit = defineEmits(['back', 'help'])
   >
     <div class="flex items-center justify-self-start">
       <NomiIconButton
-        v-if="variant !== 'welcome'"
+        v-if="variant !== 'welcome' && variant !== 'profile'"
         label="Back"
         @click="emit('back')"
       >
@@ -41,6 +41,13 @@ const emit = defineEmits(['back', 'help'])
       class="m-0 min-w-0 justify-self-center text-center font-headline text-[clamp(1rem,3.5vw,1.5rem)] font-extrabold leading-tight tracking-tight text-white"
     >
       Authentication
+    </h2>
+
+    <h2
+      v-else-if="variant === 'profile'"
+      class="m-0 min-w-0 justify-self-center text-center font-headline text-[clamp(1rem,3.5vw,1.5rem)] font-extrabold leading-tight tracking-tight text-white"
+    >
+      Your profile
     </h2>
 
     <div
