@@ -1,6 +1,11 @@
 <script setup>
 import { fileToWebpOrJpeg, MAX_IMAGE_INPUT_BYTES, POST_MAX_LONG_EDGE } from '~/utils/fileToWebp'
 
+definePageMeta({
+  layout: 'app',
+  appShell: 'none',
+})
+
 const CAPTION_MAX = 280
 const MAX_PHOTOS = 5
 

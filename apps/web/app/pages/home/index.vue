@@ -1,4 +1,8 @@
 <script setup>
+definePageMeta({
+  layout: 'app',
+})
+
 const supabase = useSupabaseClient()
 const user = useSupabaseUser()
 
@@ -14,11 +18,6 @@ const {
 } = useHomeFeed()
 
 const sentinelRef = ref(null)
-
-async function signOut () {
-  await supabase.auth.signOut()
-  await navigateTo('/')
-}
 
 onMounted(() => {
   refresh()
@@ -62,17 +61,12 @@ function onImageError (path) {
 
 <template>
   <main
-    class="mx-auto w-full max-w-md px-5 py-[max(1rem,env(safe-area-inset-top))] pb-[max(5rem,env(safe-area-inset-bottom))] text-left"
+    class="mx-auto w-full max-w-md px-5 py-[max(1rem,env(safe-area-inset-top))] text-left md:pt-6"
   >
-    <header class="mb-4 flex items-start justify-between gap-3">
-      <div>
-        <p class="text-xs font-bold uppercase tracking-[0.14em] text-nomi-mint/75">
-          Home
-        </p>
-        <h1 class="font-headline text-[clamp(1.5rem,4vw,1.75rem)] font-extrabold tracking-tight text-white">
-          Nomi
-        </h1>
-      </div>
+    <header class="mb-4">
+      <p class="text-xs font-bold uppercase tracking-[0.14em] text-nomi-mint/75">
+        Home
+      </p>
     </header>
 
     <div
@@ -108,14 +102,20 @@ function onImageError (path) {
       <p class="rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-center text-sm text-nomi-error">
         {{ error }}
       </p>
-      <div class="flex justify-center">
+      <div class="flex flex-col items-center gap-3">
         <button
           type="button"
           class="rounded-full border border-white/25 bg-transparent px-5 py-2.5 text-[0.9375rem] font-semibold text-nomi-mint/90 transition hover:border-white/40 hover:bg-white/10"
-          @click="signOut"
+          @click="refresh"
         >
-          Sign out
+          Try again
         </button>
+        <NuxtLink
+          to="/home/me"
+          class="text-sm font-semibold text-white/70 underline-offset-2 transition hover:text-white"
+        >
+          Account & sign out
+        </NuxtLink>
       </div>
     </div>
 
@@ -123,23 +123,15 @@ function onImageError (path) {
       v-else-if="posts.length === 0"
       class="flex flex-col items-center py-10 text-center"
     >
-      <p class="mb-6 max-w-[22ch] text-[1.0625rem] leading-relaxed text-nomi-mint/90">
+      <p class="mb-6 max-w-[26ch] text-[1.0625rem] leading-relaxed text-nomi-mint/90">
         Nothing here yet — posts from you and your friends show up in order.
       </p>
-      <div class="flex w-full max-w-xs flex-col gap-3">
-        <NuxtLink
-          to="/home/post"
-          class="inline-flex min-h-[3.25rem] w-full items-center justify-center rounded-full bg-white px-6 font-headline text-[1.0625rem] font-black tracking-tight text-nomi-ink shadow-lg shadow-black/10 transition hover:brightness-[1.02]"
-        >
-          New post
-        </NuxtLink>
-        <NuxtLink
-          to="/home/friends"
-          class="inline-flex min-h-[3.25rem] w-full items-center justify-center rounded-full border-2 border-white/90 bg-transparent px-6 font-headline text-[1.0625rem] font-bold tracking-tight text-white transition hover:bg-white/10"
-        >
-          People
-        </NuxtLink>
-      </div>
+      <NuxtLink
+        to="/home/friends"
+        class="inline-flex min-h-[3.25rem] w-full max-w-xs items-center justify-center rounded-full bg-white px-6 font-headline text-[1.0625rem] font-black tracking-tight text-nomi-ink shadow-lg shadow-black/10 transition hover:brightness-[1.02]"
+      >
+        Find friends
+      </NuxtLink>
     </div>
 
     <div v-else>
@@ -176,33 +168,6 @@ function onImageError (path) {
       >
         {{ error }}
       </p>
-    </div>
-
-    <div
-      v-if="!loadingInitial && !(error && posts.length === 0)"
-      class="mt-10 flex flex-col items-center gap-3 border-t border-white/10 pt-8"
-    >
-      <NuxtLink
-        v-if="posts.length > 0"
-        to="/home/post"
-        class="inline-flex min-h-[3rem] w-full max-w-xs items-center justify-center rounded-full bg-white/95 px-6 font-headline text-[1rem] font-black tracking-tight text-nomi-ink shadow-md shadow-black/10 transition hover:brightness-[1.02]"
-      >
-        New post
-      </NuxtLink>
-      <NuxtLink
-        v-if="posts.length > 0"
-        to="/home/friends"
-        class="inline-flex min-h-[3rem] w-full max-w-xs items-center justify-center rounded-full border-2 border-white/90 bg-transparent px-6 font-headline text-[1rem] font-bold tracking-tight text-white transition hover:bg-white/10"
-      >
-        People
-      </NuxtLink>
-      <button
-        type="button"
-        class="rounded-full border border-white/25 bg-transparent px-5 py-2.5 text-[0.9375rem] font-semibold text-nomi-mint/90 transition hover:border-white/40 hover:bg-white/10"
-        @click="signOut"
-      >
-        Sign out
-      </button>
     </div>
   </main>
 </template>

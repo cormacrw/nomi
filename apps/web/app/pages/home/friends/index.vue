@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import type { FriendProfile, PendingByRequest } from '~/composables/useFriendsList'
 
+definePageMeta({
+  layout: 'app',
+})
+
 const supabase = useSupabaseClient()
 const {
   friends,
@@ -11,8 +15,6 @@ const {
   refresh,
 } = useFriendsList()
 
-const myAvatarUrl = ref<string | null>(null)
-const myDisplayName = ref<string | null>(null)
 /** Request row being updated (accept / decline / cancel) */
 const actionRequestId = ref<string | null>(null)
 
@@ -27,32 +29,9 @@ function friendInitials (f: FriendProfile | PendingByRequest) {
   return initialsFromName(f.displayName)
 }
 
-async function loadMe () {
-  const { data: { user } } = await supabase.auth.getUser()
-  const uid = user?.id
-  if (!uid) return
-  const { data } = await supabase
-    .from('profiles')
-    .select('display_name, avatar_url')
-    .eq('profile_id', uid)
-    .maybeSingle()
-  if (data) {
-    myDisplayName.value = data.display_name
-    myAvatarUrl.value = data.avatar_url
-  }
-}
-
 onMounted(() => {
   refresh()
-  loadMe()
 })
-
-async function signOut () {
-  await supabase.auth.signOut()
-  await navigateTo('/')
-}
-
-const myInitials = computed(() => initialsFromName(myDisplayName.value))
 
 const hasNoConnections =
   computed(() =>
@@ -115,39 +94,14 @@ async function cancelOutgoing (friendRequestId: string) {
 
 <template>
   <!-- FRND-07 People — Stitch: clean header, list v3 / empty canonical -->
-  <div class="relative flex min-h-dvh w-full flex-col">
-    <header
-      class="fixed top-0 z-50 flex h-16 w-full max-w-md items-center justify-between self-center bg-transparent px-6"
-    >
-      <NuxtLink
-        to="/home"
-        class="flex h-10 w-10 shrink-0 items-center justify-center text-nomi-mint/90 transition hover:opacity-80 active:scale-95"
-        aria-label="Back to home"
-      >
-        <span class="material-symbols-outlined text-[1.5rem]">arrow_back</span>
-      </NuxtLink>
-      <h1 class="font-headline text-[1.375rem] font-bold tracking-tighter text-white">
+  <main class="mx-auto w-full max-w-md px-6 py-[max(1rem,env(safe-area-inset-top))] pb-8 text-left md:pt-6">
+    <header class="mb-6">
+      <p class="text-xs font-bold uppercase tracking-[0.14em] text-nomi-mint/75">
         People
-      </h1>
-      <div
-        class="h-10 w-10 shrink-0 overflow-hidden rounded-full border-2 border-white/20 bg-white/10"
-      >
-        <img
-          v-if="myAvatarUrl"
-          :src="myAvatarUrl"
-          alt=""
-          class="h-full w-full object-cover"
-        >
-        <div
-          v-else
-          class="flex h-full w-full items-center justify-center bg-nomi-mint/90 font-headline text-sm font-bold text-nomi-ink"
-        >
-          {{ myInitials }}
-        </div>
-      </div>
+      </p>
     </header>
 
-    <main class="mx-auto w-full max-w-md flex-1 px-6 pb-[max(6rem,env(safe-area-inset-bottom))] pt-24">
+    <div class="flex flex-col">
       <template v-if="loading">
         <div class="mb-6">
           <div class="h-5 w-40 rounded-md bg-nomi-mint/15" />
@@ -380,7 +334,7 @@ async function cancelOutgoing (friendRequestId: string) {
       </template>
 
       <div
-        v-if="!loading && !error && friends.length > 0"
+        v-if="!loading && !error && !hasNoConnections"
         class="mt-10 flex flex-col items-center gap-3 border-t border-white/10 pt-8"
       >
         <NuxtLink
@@ -389,33 +343,7 @@ async function cancelOutgoing (friendRequestId: string) {
         >
           Add someone by email
         </NuxtLink>
-        <button
-          type="button"
-          class="rounded-full border border-white/25 bg-transparent px-5 py-2.5 text-[0.9375rem] font-semibold text-nomi-mint/90 transition hover:border-white/40 hover:bg-white/10"
-          @click="signOut"
-        >
-          Sign out
-        </button>
       </div>
-
-      <div
-        v-else-if="!loading && !error && friends.length === 0"
-        class="mt-10 flex flex-col items-center gap-3 border-t border-white/10 pt-8"
-      >
-        <NuxtLink
-          to="/home/friends/add"
-          class="inline-flex min-h-[3rem] w-full max-w-xs items-center justify-center rounded-full bg-white/95 px-6 font-headline text-[1rem] font-black tracking-tight text-nomi-ink shadow-md shadow-black/10 transition hover:brightness-[1.02]"
-        >
-          Add someone by email
-        </NuxtLink>
-        <button
-          type="button"
-          class="rounded-full border border-white/25 bg-transparent px-5 py-2.5 text-[0.9375rem] font-semibold text-nomi-mint/90 transition hover:border-white/40 hover:bg-white/10"
-          @click="signOut"
-        >
-          Sign out
-        </button>
-      </div>
-    </main>
-  </div>
+    </div>
+  </main>
 </template>

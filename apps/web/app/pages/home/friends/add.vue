@@ -1,4 +1,9 @@
 <script setup>
+definePageMeta({
+  layout: 'app',
+  appShell: 'none',
+})
+
 const supabase = useSupabaseClient()
 
 const emailInput = ref('')
@@ -213,11 +218,6 @@ async function sendRequest () {
   }
 }
 
-async function signOut () {
-  await supabase.auth.signOut()
-  await navigateTo('/')
-}
-
 watch(emailInput, () => {
   formError.value = ''
 })
@@ -347,14 +347,5 @@ watch(emailInput, () => {
       </div>
     </div>
 
-    <div class="mt-auto flex flex-col items-center gap-3 border-t border-white/10 pt-8">
-      <button
-        type="button"
-        class="rounded-full border border-white/25 bg-transparent px-5 py-2.5 text-[0.9375rem] font-semibold text-nomi-mint/90 transition hover:border-white/40 hover:bg-white/10"
-        @click="signOut"
-      >
-        Sign out
-      </button>
-    </div>
   </main>
 </template>

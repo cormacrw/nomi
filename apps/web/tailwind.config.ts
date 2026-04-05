@@ -21,8 +21,8 @@ export default {
         },
       },
       fontFamily: {
-        headline: ['Epilogue', 'system-ui', 'sans-serif'],
-        sans: ['Manrope', 'system-ui', 'sans-serif'],
+        headline: ['Lexend', 'system-ui', 'sans-serif'],
+        sans: ['Lexend', 'system-ui', 'sans-serif'],
       },
     },
   },
