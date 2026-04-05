@@ -123,12 +123,17 @@ function fitInsideBox (width: number, height: number, maxLongEdge: number): { wi
   }
 }
 
+/** Decode with EXIF orientation applied when supported; then scale proportionally (preserves aspect ratio). */
 async function decodeWithCanvasFallback (file: File, maxLongEdge: number): Promise<ImageBitmap> {
   let bitmap: ImageBitmap
   try {
-    bitmap = await createImageBitmap(file)
+    bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' })
   } catch {
-    throw new Error('Could not read this image. Try JPEG or PNG, or use Safari for HEIC.')
+    try {
+      bitmap = await createImageBitmap(file)
+    } catch {
+      throw new Error('Could not read this image. Try JPEG or PNG, or use Safari for HEIC.')
+    }
   }
   const scaled = fitInsideBox(bitmap.width, bitmap.height, maxLongEdge)
   const w = scaled.width
@@ -210,23 +215,9 @@ export async function fileToWebpOrJpeg (
     }
   }
 
-  const target = sniffed ? fitInsideBox(sniffed.width, sniffed.height, maxLongEdge) : null
-
-  let bitmap: ImageBitmap
-
-  if (target) {
-    try {
-      bitmap = await createImageBitmap(file, {
-        resizeWidth: target.width,
-        resizeHeight: target.height,
-        resizeQuality: 'high',
-      })
-    } catch {
-      bitmap = await decodeWithCanvasFallback(file, maxLongEdge)
-    }
-  } else {
-    bitmap = await decodeWithCanvasFallback(file, maxLongEdge)
-  }
+  // Always decode then scale on canvas. Sniffed dimensions ignore EXIF orientation; using them with
+  // createImageBitmap({ resizeWidth, resizeHeight }) caused wrong aspect (e.g. squashed phone JPEGs).
+  const bitmap = await decodeWithCanvasFallback(file, maxLongEdge)
 
   return encodeBitmapToWebpOrJpeg(bitmap, quality)
 }
