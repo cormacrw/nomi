@@ -1,16 +1,7 @@
 <script setup>
 const isDev = import.meta.dev
 
-const { seen, markSeen } = useWelcomeLocal()
-
-onMounted(() => {
-  if (seen.value) {
-    navigateTo('/onboarding/email')
-  }
-})
-
 function continueFromWelcome () {
-  markSeen()
   navigateTo('/onboarding/email')
 }
 </script>
