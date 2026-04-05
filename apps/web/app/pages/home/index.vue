@@ -137,7 +137,7 @@ function onImageError (path) {
           to="/home/friends"
           class="inline-flex min-h-[3.25rem] w-full items-center justify-center rounded-full border-2 border-white/90 bg-transparent px-6 font-headline text-[1.0625rem] font-bold tracking-tight text-white transition hover:bg-white/10"
         >
-          Find friends
+          People
         </NuxtLink>
       </div>
     </div>
@@ -188,6 +188,13 @@ function onImageError (path) {
         class="inline-flex min-h-[3rem] w-full max-w-xs items-center justify-center rounded-full bg-white/95 px-6 font-headline text-[1rem] font-black tracking-tight text-nomi-ink shadow-md shadow-black/10 transition hover:brightness-[1.02]"
       >
         New post
+      </NuxtLink>
+      <NuxtLink
+        v-if="posts.length > 0"
+        to="/home/friends"
+        class="inline-flex min-h-[3rem] w-full max-w-xs items-center justify-center rounded-full border-2 border-white/90 bg-transparent px-6 font-headline text-[1rem] font-bold tracking-tight text-white transition hover:bg-white/10"
+      >
+        People
       </NuxtLink>
       <button
         type="button"
