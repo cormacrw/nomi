@@ -84,6 +84,7 @@ const nonGoals = [
       <div class="mx-auto max-w-3xl text-center">
         <p class="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-white/70">
           Nomi
+          <span class="font-medium normal-case tracking-normal text-white/60">(know-me)</span>
         </p>
         <h1
           id="hero-heading"
