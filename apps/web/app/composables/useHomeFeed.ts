@@ -1,3 +1,7 @@
+import { sameProfileId } from '~/composables/useResolvedAuthUserId'
+import type { ReactionTypeKey } from '~/utils/postReactionTypes'
+import { isValidReactionType } from '~/utils/postReactionTypes'
+
 const PAGE_SIZE = 20
 const SIGNED_URL_TTL_SEC = 900
 
@@ -16,6 +20,15 @@ export type FeedMediaItem = {
   signedUrl: string | null
 }
 
+export type FeedReaction = {
+  profileId: string
+  reactionType: string
+  createdAt: string
+  reactorDisplayName: string | null
+  reactorAvatarUrl: string | null
+  reactorAvatarUpdatedAt: string | null
+}
+
 export type FeedPost = {
   postId: string
   caption: string
@@ -25,6 +38,7 @@ export type FeedPost = {
   authorAvatarUrl: string | null
   authorAvatarUpdatedAt: string | null
   media: FeedMediaItem[]
+  reactions: FeedReaction[]
 }
 
 type RawProfile = {
@@ -41,6 +55,13 @@ type RawMedia = {
   height: number | null
 }
 
+type RawReactionRow = {
+  profile_id: string
+  reaction_type: string
+  created_at: string
+  profiles?: RawProfile | RawProfile[] | null
+}
+
 type RawPostRow = {
   post_id: string
   caption: string
@@ -48,10 +69,11 @@ type RawPostRow = {
   author_profile_id: string
   profiles: RawProfile | RawProfile[]
   post_media: RawMedia[] | null
+  post_reactions: RawReactionRow[] | null
 }
 
-function normalizeProfile (p: RawProfile | RawProfile[]) {
-  const row = Array.isArray(p) ? p[0] : p
+function normalizeProfile (p: RawProfile | RawProfile[] | null | undefined) {
+  const row = p == null ? null : Array.isArray(p) ? p[0] : p
   if (!row) {
     return {
       display_name: null as string | null,
@@ -60,6 +82,24 @@ function normalizeProfile (p: RawProfile | RawProfile[]) {
     }
   }
   return row
+}
+
+function mapRawReactions (rows: RawReactionRow[] | null | undefined): FeedReaction[] {
+  if (!rows?.length) return []
+  const sorted = [...rows].sort(
+    (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+  )
+  return sorted.map((r) => {
+    const prof = normalizeProfile(r.profiles)
+    return {
+      profileId: r.profile_id,
+      reactionType: r.reaction_type,
+      createdAt: r.created_at,
+      reactorDisplayName: prof.display_name,
+      reactorAvatarUrl: prof.avatar_url,
+      reactorAvatarUpdatedAt: prof.updated_at,
+    }
+  })
 }
 
 function mapRawPost (row: RawPostRow): Omit<FeedPost, 'media'> & { media: Omit<FeedMediaItem, 'signedUrl'>[] } {
@@ -73,6 +113,7 @@ function mapRawPost (row: RawPostRow): Omit<FeedPost, 'media'> & { media: Omit<F
     authorDisplayName: prof.display_name,
     authorAvatarUrl: prof.avatar_url,
     authorAvatarUpdatedAt: prof.updated_at,
+    reactions: mapRawReactions(row.post_reactions),
     media: mediaRows.map((m) => ({
       postMediaId: m.post_media_id,
       sortOrder: m.sort_order,
@@ -82,6 +123,37 @@ function mapRawPost (row: RawPostRow): Omit<FeedPost, 'media'> & { media: Omit<F
       height: m.height,
     })),
   }
+}
+
+function patchPostReactions (
+  post: FeedPost,
+  userId: string,
+  next: { type: 'set', reactionType: ReactionTypeKey } | { type: 'clear' },
+): FeedPost {
+  if (next.type === 'clear') {
+    return {
+      ...post,
+      reactions: post.reactions.filter((r) => !sameProfileId(r.profileId, userId)),
+    }
+  }
+  const idx = post.reactions.findIndex((r) => sameProfileId(r.profileId, userId))
+  if (idx >= 0) {
+    const nextReactions = [...post.reactions]
+    nextReactions[idx] = {
+      ...post.reactions[idx],
+      reactionType: next.reactionType,
+    }
+    return { ...post, reactions: nextReactions }
+  }
+  const newRow: FeedReaction = {
+    profileId: userId,
+    reactionType: next.reactionType,
+    createdAt: new Date().toISOString(),
+    reactorDisplayName: 'You',
+    reactorAvatarUrl: null,
+    reactorAvatarUpdatedAt: null,
+  }
+  return { ...post, reactions: [...post.reactions, newRow] }
 }
 
 export function useHomeFeed () {
@@ -101,7 +173,13 @@ export function useHomeFeed () {
     created_at,
     author_profile_id,
     profiles!posts_author_profile_id_fkey (display_name, avatar_url, updated_at),
-    post_media (post_media_id, sort_order, storage_path, mime_type, width, height)
+    post_media (post_media_id, sort_order, storage_path, mime_type, width, height),
+    post_reactions (
+      profile_id,
+      reaction_type,
+      created_at,
+      profiles!post_reactions_profile_id_fkey (display_name, avatar_url, updated_at)
+    )
   `
 
   async function signPaths (paths: string[]) {
@@ -141,6 +219,7 @@ export function useHomeFeed () {
       authorDisplayName: p.authorDisplayName,
       authorAvatarUrl: p.authorAvatarUrl,
       authorAvatarUpdatedAt: p.authorAvatarUpdatedAt,
+      reactions: p.reactions,
       media: p.media.map((m) => ({
         ...m,
         signedUrl: urlByPath[m.storagePath] ?? null,
@@ -161,6 +240,7 @@ export function useHomeFeed () {
       .is('deleted_at', null)
       .order('created_at', { ascending: false })
       .order('post_id', { ascending: false })
+      .order('created_at', { ascending: true, foreignTable: 'post_reactions' })
       .limit(PAGE_SIZE)
 
     if (cursor) {
@@ -242,6 +322,62 @@ export function useHomeFeed () {
     }))
   }
 
+  async function setReaction (postId: string, reactionType: ReactionTypeKey) {
+    if (!isValidReactionType(reactionType)) {
+      return { ok: false as const, message: 'Invalid reaction' }
+    }
+    const { data: auth } = await supabase.auth.getUser()
+    const user = auth.user
+    if (!user) return { ok: false as const, message: 'Not signed in' }
+
+    const before = posts.value.find((p) => p.postId === postId)
+    if (!before) return { ok: false as const, message: 'Post not found' }
+
+    posts.value = posts.value.map((p) =>
+      p.postId === postId ? patchPostReactions(p, user.id, { type: 'set', reactionType }) : p,
+    )
+
+    const { error: upErr } = await supabase.from('post_reactions').upsert(
+      {
+        post_id: postId,
+        profile_id: user.id,
+        reaction_type: reactionType,
+      },
+      { onConflict: 'post_id,profile_id' },
+    )
+
+    if (upErr) {
+      posts.value = posts.value.map((p) => (p.postId === postId ? before : p))
+      return { ok: false as const, message: upErr.message }
+    }
+    return { ok: true as const }
+  }
+
+  async function clearReaction (postId: string) {
+    const { data: auth } = await supabase.auth.getUser()
+    const user = auth.user
+    if (!user) return { ok: false as const, message: 'Not signed in' }
+
+    const before = posts.value.find((p) => p.postId === postId)
+    if (!before) return { ok: false as const, message: 'Post not found' }
+
+    posts.value = posts.value.map((p) =>
+      p.postId === postId ? patchPostReactions(p, user.id, { type: 'clear' }) : p,
+    )
+
+    const { error: delErr } = await supabase
+      .from('post_reactions')
+      .delete()
+      .eq('post_id', postId)
+      .eq('profile_id', user.id)
+
+    if (delErr) {
+      posts.value = posts.value.map((p) => (p.postId === postId ? before : p))
+      return { ok: false as const, message: delErr.message }
+    }
+    return { ok: true as const }
+  }
+
   return {
     posts,
     loadingInitial,
@@ -251,5 +387,7 @@ export function useHomeFeed () {
     refresh,
     loadMore,
     refreshSignedUrlForPath,
+    setReaction,
+    clearReaction,
   }
 }
