@@ -45,7 +45,7 @@ onMounted(async () => {
   }
   const complete = await getProfileSetupComplete(supabase, uid)
   if (complete) {
-    await navigateTo('/home', { replace: true })
+    await navigateTo(appPath('/home'), { replace: true })
   }
 })
 
@@ -122,7 +122,7 @@ async function submit () {
     }
 
     markProfileSetupComplete(uid)
-    await navigateTo('/onboarding/success')
+    await navigateTo(appPath('/onboarding/success'))
   } catch (e) {
     formError.value = e instanceof Error ? e.message : 'Something went wrong.'
   } finally {

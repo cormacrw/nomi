@@ -10,7 +10,7 @@ onMounted(() => {
     pending.value = sessionStorage.getItem('nomi_pending_email') || ''
   }
   if (!pending.value) {
-    navigateTo('/onboarding/email')
+    navigateTo(appPath('/onboarding/email'))
   }
 })
 
@@ -21,7 +21,7 @@ async function resend () {
   resendMsg.value = ''
   resending.value = true
   try {
-    const redirectTo = `${useAuthRedirectOrigin()}/auth/confirm`
+    const redirectTo = useAuthConfirmUrl()
     const { error } = await supabase.auth.signInWithOtp({
       email: pending.value,
       options: { emailRedirectTo: redirectTo },
@@ -37,7 +37,7 @@ async function resend () {
 }
 
 function goBack () {
-  navigateTo('/onboarding/email')
+  navigateTo(appPath('/onboarding/email'))
 }
 </script>
 

@@ -24,7 +24,7 @@ async function goSuccess () {
   }
   finished = true
   signInPhase.value = 'done'
-  await navigateTo('/onboarding/profile', { replace: true })
+  await navigateTo(appPath('/onboarding/profile'), { replace: true })
 }
 
 /** If anything failed after tokens were stored, still complete sign-in */
@@ -114,7 +114,7 @@ onMounted(() => {
         {{ errMsg }}
       </p>
       <NuxtLink
-        to="/onboarding/email"
+        :to="appPath('/onboarding/email')"
         class="mt-6 font-semibold text-white underline"
       >
         Back to email sign-in

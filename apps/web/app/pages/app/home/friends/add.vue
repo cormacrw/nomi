@@ -229,7 +229,7 @@ watch(emailInput, () => {
   >
     <header class="mb-8 flex items-center gap-3">
       <NuxtLink
-        to="/home/friends"
+        :to="appPath('/home/friends')"
         class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-nomi-mint/90 transition hover:bg-white/10"
         aria-label="Back to People"
       >

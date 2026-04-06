@@ -20,7 +20,7 @@ export default defineNuxtConfig({
     },
   },
   routeRules: {
-    '/auth/confirm': { ssr: false },
+    '/app/auth/confirm': { ssr: false },
   },
   app: {
     head: {

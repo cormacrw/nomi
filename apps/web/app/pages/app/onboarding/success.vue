@@ -7,21 +7,21 @@ onMounted(async () => {
   if (uid) {
     const complete = await getProfileSetupComplete(supabase, uid)
     if (!complete) {
-      await navigateTo('/onboarding/profile')
+      await navigateTo(appPath('/onboarding/profile'))
       return
     }
     await syncWelcomeToProfile(supabase, uid)
   }
   await new Promise((r) => setTimeout(r, 900))
-  await navigateTo('/home')
+  await navigateTo(appPath('/home'))
 })
 
 function goHome () {
-  navigateTo('/home')
+  navigateTo(appPath('/home'))
 }
 
 function goBack () {
-  navigateTo('/onboarding/profile')
+  navigateTo(appPath('/onboarding/profile'))
 }
 </script>
 

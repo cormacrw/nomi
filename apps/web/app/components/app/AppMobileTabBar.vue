@@ -1,20 +1,27 @@
 <script setup lang="ts">
+import { appPath } from '~/utils/appBase'
+
 const route = useRoute()
 
+const feed = appPath('/home')
+const friends = appPath('/home/friends')
+const post = appPath('/home/post')
+const me = appPath('/home/me')
+
 function isFeedActive () {
-  return route.path === '/home' || route.path === '/home/'
+  return route.path === feed || route.path === `${feed}/`
 }
 
 function isPeopleActive () {
-  return route.path === '/home/friends' || route.path.startsWith('/home/friends/')
+  return route.path === friends || route.path.startsWith(`${friends}/`)
 }
 
 function isCreateActive () {
-  return route.path.startsWith('/home/post')
+  return route.path.startsWith(post)
 }
 
 function isYouActive () {
-  return route.path === '/home/me'
+  return route.path === me
 }
 
 function tabClass (active: boolean) {
@@ -34,7 +41,7 @@ function tabClass (active: boolean) {
       class="pointer-events-auto mx-4 flex max-w-md items-end justify-around gap-1 rounded-[2rem] border border-white/15 bg-black/20 px-2 py-2 shadow-lg shadow-black/20 backdrop-blur-md"
     >
       <NuxtLink
-        to="/home"
+        :to="feed"
         :class="tabClass(isFeedActive())"
         :aria-current="isFeedActive() ? 'page' : undefined"
       >
@@ -46,7 +53,7 @@ function tabClass (active: boolean) {
       </NuxtLink>
 
       <NuxtLink
-        to="/home/friends"
+        :to="friends"
         :class="tabClass(isPeopleActive())"
         :aria-current="isPeopleActive() ? 'page' : undefined"
       >
@@ -58,7 +65,7 @@ function tabClass (active: boolean) {
       </NuxtLink>
 
       <NuxtLink
-        to="/home/post"
+        :to="post"
         class="-mt-4 flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-white text-nomi-ink shadow-lg shadow-black/25 ring-4 ring-black/10 transition hover:brightness-[1.02] active:scale-[0.98]"
         :class="isCreateActive() ? 'ring-white/30' : ''"
         aria-label="New post"
@@ -71,7 +78,7 @@ function tabClass (active: boolean) {
       </NuxtLink>
 
       <NuxtLink
-        to="/home/me"
+        :to="me"
         :class="tabClass(isYouActive())"
         :aria-current="isYouActive() ? 'page' : undefined"
       >

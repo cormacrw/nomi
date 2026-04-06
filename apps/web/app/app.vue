@@ -2,7 +2,10 @@
 useHead({
   title: 'Nomi',
   meta: [
-    { name: 'description', content: 'Social that stays between people you actually know.' },
+    {
+      name: 'description',
+      content: 'Private social for people you know — verified identity, intentional graph, no public directory at launch.',
+    },
   ],
 })
 </script>

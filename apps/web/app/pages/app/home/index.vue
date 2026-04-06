@@ -111,7 +111,7 @@ function onImageError (path) {
           Try again
         </button>
         <NuxtLink
-          to="/home/me"
+          :to="appPath('/home/me')"
           class="text-sm font-semibold text-white/70 underline-offset-2 transition hover:text-white"
         >
           Account & sign out
@@ -127,7 +127,7 @@ function onImageError (path) {
         Nothing here yet — posts from you and your friends show up in order.
       </p>
       <NuxtLink
-        to="/home/friends"
+        :to="appPath('/home/friends')"
         class="inline-flex min-h-[3.25rem] w-full max-w-xs items-center justify-center rounded-full bg-white px-6 font-headline text-[1.0625rem] font-black tracking-tight text-nomi-ink shadow-lg shadow-black/10 transition hover:brightness-[1.02]"
       >
         Find friends

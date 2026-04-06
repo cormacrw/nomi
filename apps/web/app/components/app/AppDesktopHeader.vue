@@ -1,10 +1,17 @@
 <script setup lang="ts">
+import { appPath } from '~/utils/appBase'
+
 const route = useRoute()
+
+const feed = appPath('/home')
+const friends = appPath('/home/friends')
+const me = appPath('/home/me')
+const post = appPath('/home/post')
 
 function isNavActive (path: string) {
   const p = route.path
   const exact = p === path || p === `${path}/`
-  const child = path !== '/home' && p.startsWith(`${path}/`)
+  const child = path !== feed && p.startsWith(`${path}/`)
   return exact || child
 }
 
@@ -25,7 +32,7 @@ function navClass (path: string) {
       class="flex h-[3.75rem] w-full max-w-6xl items-center justify-between gap-4 px-4 pt-[max(0.25rem,env(safe-area-inset-top))] pb-2"
     >
       <NuxtLink
-        to="/home"
+        :to="feed"
         class="flex min-w-0 items-center gap-2 text-white transition hover:opacity-90"
         aria-label="Nomi home"
       >
@@ -42,31 +49,31 @@ function navClass (path: string) {
         aria-label="Main"
       >
         <NuxtLink
-          to="/home"
+          :to="feed"
           class="font-headline"
-          :class="navClass('/home')"
-          :aria-current="isNavActive('/home') ? 'page' : undefined"
+          :class="navClass(feed)"
+          :aria-current="isNavActive(feed) ? 'page' : undefined"
         >
           Feed
         </NuxtLink>
         <NuxtLink
-          to="/home/friends"
+          :to="friends"
           class="font-headline"
-          :class="navClass('/home/friends')"
-          :aria-current="isNavActive('/home/friends') ? 'page' : undefined"
+          :class="navClass(friends)"
+          :aria-current="isNavActive(friends) ? 'page' : undefined"
         >
           People
         </NuxtLink>
         <NuxtLink
-          to="/home/me"
+          :to="me"
           class="font-headline"
-          :class="navClass('/home/me')"
-          :aria-current="isNavActive('/home/me') ? 'page' : undefined"
+          :class="navClass(me)"
+          :aria-current="isNavActive(me) ? 'page' : undefined"
         >
           You
         </NuxtLink>
         <NuxtLink
-          to="/home/post"
+          :to="post"
           class="ml-1 inline-flex min-h-[2.5rem] shrink-0 items-center justify-center rounded-full bg-white px-4 font-headline text-sm font-black tracking-tight text-nomi-ink shadow-md shadow-black/10 transition hover:brightness-[1.02]"
         >
           New post

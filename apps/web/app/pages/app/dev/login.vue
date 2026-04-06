@@ -28,7 +28,7 @@ async function submit () {
       err.value = error.message
       return
     }
-    await navigateTo('/home')
+    await navigateTo(appPath('/home'))
   } finally {
     busy.value = false
   }

@@ -282,23 +282,6 @@ async function cancelOutgoing (friendRequestId: string) {
               </div>
             </div>
           </div>
-
-          <div
-            class="relative mt-12 overflow-hidden rounded-xl bg-[#002517]/40 p-8 backdrop-blur-sm"
-          >
-            <div class="relative z-10">
-              <h3 class="mb-2 font-headline text-2xl text-white">
-                Connect globally
-              </h3>
-              <p class="max-w-[200px] text-sm text-nomi-mint/70">
-                Expand your emerald circle with people across the network.
-              </p>
-            </div>
-            <div
-              class="pointer-events-none absolute -right-10 -bottom-10 h-40 w-40 rounded-full bg-nomi-mint/20 blur-3xl"
-              aria-hidden="true"
-            />
-          </div>
         </template>
 
         <!-- Empty: no friends and no pending -->
@@ -315,7 +298,7 @@ async function cancelOutgoing (friendRequestId: string) {
             </p>
             <div class="pt-6">
               <NuxtLink
-                to="/home/friends/add"
+                :to="appPath('/home/friends/add')"
                 class="inline-flex min-h-[3.25rem] w-full max-w-sm items-center justify-center rounded-full bg-white px-8 font-headline text-[1rem] font-extrabold uppercase tracking-wide text-nomi-ink shadow-none transition active:scale-[0.98]"
               >
                 Add someone by email
@@ -338,7 +321,7 @@ async function cancelOutgoing (friendRequestId: string) {
         class="mt-10 flex flex-col items-center gap-3 border-t border-white/10 pt-8"
       >
         <NuxtLink
-          to="/home/friends/add"
+          :to="appPath('/home/friends/add')"
           class="inline-flex min-h-[3rem] w-full max-w-xs items-center justify-center rounded-full bg-white/95 px-6 font-headline text-[1rem] font-black tracking-tight text-nomi-ink shadow-md shadow-black/10 transition hover:brightness-[1.02]"
         >
           Add someone by email

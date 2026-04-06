@@ -159,7 +159,7 @@ function goBack () {
     step.value = 'pick'
     return
   }
-  navigateTo('/home')
+  navigateTo(appPath('/home'))
 }
 
 async function goEditFromReview () {
@@ -213,7 +213,7 @@ async function cancelUploadError () {
     publishing.value = false
   }
   resetWizardState()
-  await navigateTo('/home')
+  await navigateTo(appPath('/home'))
 }
 
 async function publishOrResume () {
@@ -300,7 +300,7 @@ async function publishOrResume () {
     items.value = []
     caption.value = ''
 
-    await navigateTo('/home')
+    await navigateTo(appPath('/home'))
   } catch (e) {
     const msg = e instanceof Error ? e.message : 'Upload failed'
     uploadMessage.value = msg

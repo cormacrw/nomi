@@ -38,7 +38,7 @@ onMounted(() => {
 
 async function signOut () {
   await supabase.auth.signOut()
-  await navigateTo('/')
+  await navigateTo('/', { replace: true })
 }
 </script>
 

@@ -23,7 +23,7 @@ async function sendLink () {
 
   submitting.value = true
   try {
-    const redirectTo = `${useAuthRedirectOrigin()}/auth/confirm`
+    const redirectTo = useAuthConfirmUrl()
     const { error } = await supabase.auth.signInWithOtp({
       email: addr,
       options: { emailRedirectTo: redirectTo },
@@ -35,7 +35,7 @@ async function sendLink () {
     if (import.meta.client) {
       sessionStorage.setItem('nomi_pending_email', addr)
     }
-    await navigateTo('/onboarding/check-email')
+    await navigateTo(appPath('/onboarding/check-email'))
   } finally {
     submitting.value = false
   }
