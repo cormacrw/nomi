@@ -23,10 +23,15 @@ export type FeedPost = {
   authorProfileId: string
   authorDisplayName: string | null
   authorAvatarUrl: string | null
+  authorAvatarUpdatedAt: string | null
   media: FeedMediaItem[]
 }
 
-type RawProfile = { display_name: string | null, avatar_url: string | null } | null
+type RawProfile = {
+  display_name: string | null
+  avatar_url: string | null
+  updated_at: string | null
+} | null
 type RawMedia = {
   post_media_id: string
   sort_order: number
@@ -47,7 +52,13 @@ type RawPostRow = {
 
 function normalizeProfile (p: RawProfile | RawProfile[]) {
   const row = Array.isArray(p) ? p[0] : p
-  if (!row) return { display_name: null as string | null, avatar_url: null as string | null }
+  if (!row) {
+    return {
+      display_name: null as string | null,
+      avatar_url: null as string | null,
+      updated_at: null as string | null,
+    }
+  }
   return row
 }
 
@@ -61,6 +72,7 @@ function mapRawPost (row: RawPostRow): Omit<FeedPost, 'media'> & { media: Omit<F
     authorProfileId: row.author_profile_id,
     authorDisplayName: prof.display_name,
     authorAvatarUrl: prof.avatar_url,
+    authorAvatarUpdatedAt: prof.updated_at,
     media: mediaRows.map((m) => ({
       postMediaId: m.post_media_id,
       sortOrder: m.sort_order,
@@ -88,7 +100,7 @@ export function useHomeFeed () {
     caption,
     created_at,
     author_profile_id,
-    profiles!posts_author_profile_id_fkey (display_name, avatar_url),
+    profiles!posts_author_profile_id_fkey (display_name, avatar_url, updated_at),
     post_media (post_media_id, sort_order, storage_path, mime_type, width, height)
   `
 
@@ -128,6 +140,7 @@ export function useHomeFeed () {
       authorProfileId: p.authorProfileId,
       authorDisplayName: p.authorDisplayName,
       authorAvatarUrl: p.authorAvatarUrl,
+      authorAvatarUpdatedAt: p.authorAvatarUpdatedAt,
       media: p.media.map((m) => ({
         ...m,
         signedUrl: urlByPath[m.storagePath] ?? null,

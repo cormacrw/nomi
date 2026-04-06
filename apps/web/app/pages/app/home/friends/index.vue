@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { FriendProfile, PendingByRequest } from '~/composables/useFriendsList'
+import { avatarSrc } from '~/utils/avatarSrc'
 
 definePageMeta({
   layout: 'app',
@@ -155,7 +156,7 @@ async function cancelOutgoing (friendRequestId: string) {
                 >
                   <img
                     v-if="r.avatarUrl"
-                    :src="r.avatarUrl"
+                    :src="avatarSrc(r.avatarUrl, r.avatarUpdatedAt) ?? r.avatarUrl"
                     alt=""
                     class="h-full w-full object-cover"
                   >
@@ -214,7 +215,7 @@ async function cancelOutgoing (friendRequestId: string) {
               >
                 <img
                   v-if="r.avatarUrl"
-                  :src="r.avatarUrl"
+                  :src="avatarSrc(r.avatarUrl, r.avatarUpdatedAt) ?? r.avatarUrl"
                   alt=""
                   class="h-full w-full object-cover"
                 >
@@ -263,7 +264,7 @@ async function cancelOutgoing (friendRequestId: string) {
               >
                 <img
                   v-if="f.avatarUrl"
-                  :src="f.avatarUrl"
+                  :src="avatarSrc(f.avatarUrl, f.avatarUpdatedAt) ?? f.avatarUrl"
                   alt=""
                   class="h-full w-full object-cover"
                 >

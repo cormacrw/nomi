@@ -1,4 +1,6 @@
 <script setup>
+import { avatarSrc } from '~/utils/avatarSrc'
+
 definePageMeta({
   layout: 'app',
   appShell: 'none',
@@ -12,7 +14,7 @@ const sendingRequest = ref(false)
 const formError = ref('')
 const infoMessage = ref('')
 
-/** @type {import('vue').Ref<{ profileId: string, displayName: string | null, avatarUrl: string | null } | null>} */
+/** @type {import('vue').Ref<{ profileId: string, displayName: string | null, avatarUrl: string | null, avatarUpdatedAt: string | null } | null>} */
 const candidate = ref(null)
 
 /** @type {import('vue').Ref<'accepted' | 'pending_out' | 'pending_in' | 'other' | null>} */
@@ -130,6 +132,7 @@ async function lookup () {
       profileId: row.profile_id,
       displayName: row.display_name,
       avatarUrl: row.avatar_url,
+      avatarUpdatedAt: row.updated_at ?? null,
     }
     await loadRequestState(row.profile_id, me)
   } finally {
@@ -291,7 +294,7 @@ watch(emailInput, () => {
         >
           <img
             v-if="candidate.avatarUrl"
-            :src="candidate.avatarUrl"
+            :src="avatarSrc(candidate.avatarUrl, candidate.avatarUpdatedAt) ?? candidate.avatarUrl"
             alt=""
             class="h-full w-full object-cover"
           >

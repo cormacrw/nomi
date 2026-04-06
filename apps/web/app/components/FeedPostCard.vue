@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { FeedPost } from '~/composables/useHomeFeed'
+import { avatarSrc } from '~/utils/avatarSrc'
 
 const props = defineProps<{
   post: FeedPost
@@ -47,6 +48,10 @@ const initials = computed(() => {
   if (parts.length >= 2) return (parts[0][0] + parts[1][0]).toUpperCase()
   return n.slice(0, 2).toUpperCase()
 })
+
+const authorAvatarDisplay = computed(() =>
+  avatarSrc(postRef.value.authorAvatarUrl, postRef.value.authorAvatarUpdatedAt ?? null),
+)
 </script>
 
 <template>
@@ -56,8 +61,8 @@ const initials = computed(() => {
         class="flex h-11 w-11 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white/15 text-sm font-bold text-white"
       >
         <img
-          v-if="post.authorAvatarUrl"
-          :src="post.authorAvatarUrl"
+          v-if="authorAvatarDisplay"
+          :src="authorAvatarDisplay"
           alt=""
           class="h-full w-full object-cover"
         >

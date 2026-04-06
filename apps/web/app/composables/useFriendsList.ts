@@ -2,6 +2,7 @@ export type FriendProfile = {
   profileId: string
   displayName: string | null
   avatarUrl: string | null
+  avatarUpdatedAt: string | null
 }
 
 export type PendingByRequest = {
@@ -9,6 +10,7 @@ export type PendingByRequest = {
   profileId: string
   displayName: string | null
   avatarUrl: string | null
+  avatarUpdatedAt: string | null
 }
 
 async function getCurrentUserId (supabase: ReturnType<typeof useSupabaseClient>) {
@@ -17,13 +19,19 @@ async function getCurrentUserId (supabase: ReturnType<typeof useSupabaseClient>)
 }
 
 function mapProfiles (
-  rows: { profile_id: string, display_name: string | null, avatar_url: string | null }[],
-): Map<string, { displayName: string | null, avatarUrl: string | null }> {
-  const m = new Map<string, { displayName: string | null, avatarUrl: string | null }>()
+  rows: {
+    profile_id: string
+    display_name: string | null
+    avatar_url: string | null
+    updated_at: string | null
+  }[],
+): Map<string, { displayName: string | null, avatarUrl: string | null, avatarUpdatedAt: string | null }> {
+  const m = new Map<string, { displayName: string | null, avatarUrl: string | null, avatarUpdatedAt: string | null }>()
   for (const p of rows) {
     m.set(p.profile_id, {
       displayName: p.display_name,
       avatarUrl: p.avatar_url,
+      avatarUpdatedAt: p.updated_at,
     })
   }
   return m
@@ -123,7 +131,7 @@ export function useFriendsList () {
 
     const { data: profs, error: pErr } = await supabase
       .from('profiles')
-      .select('profile_id, display_name, avatar_url')
+      .select('profile_id, display_name, avatar_url, updated_at')
       .in('profile_id', allProfileIds)
 
     if (pErr) {
@@ -143,6 +151,7 @@ export function useFriendsList () {
         profileId: id,
         displayName: meta?.displayName ?? null,
         avatarUrl: meta?.avatarUrl ?? null,
+        avatarUpdatedAt: meta?.avatarUpdatedAt ?? null,
       }
     })
 
@@ -160,6 +169,7 @@ export function useFriendsList () {
         profileId: r.from_profile_id,
         displayName: meta?.displayName ?? null,
         avatarUrl: meta?.avatarUrl ?? null,
+        avatarUpdatedAt: meta?.avatarUpdatedAt ?? null,
       }
     })
 
@@ -170,6 +180,7 @@ export function useFriendsList () {
         profileId: r.to_profile_id,
         displayName: meta?.displayName ?? null,
         avatarUrl: meta?.avatarUrl ?? null,
+        avatarUpdatedAt: meta?.avatarUpdatedAt ?? null,
       }
     })
 

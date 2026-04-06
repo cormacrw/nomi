@@ -1,5 +1,6 @@
 <script setup>
-import { fileToWebpOrJpeg, MAX_IMAGE_INPUT_BYTES, AVATAR_MAX_LONG_EDGE } from '~/utils/fileToWebp'
+import { MAX_IMAGE_INPUT_BYTES } from '~/utils/fileToWebp'
+import { uploadProfileAvatarToStorage } from '~/utils/uploadProfileAvatar'
 
 const supabase = useSupabaseClient()
 
@@ -89,18 +90,8 @@ async function submit () {
     let avatarUrl = null
     const file = photoFile.value
     if (file && file instanceof File) {
-      const { blob, mime } = await fileToWebpOrJpeg(file, { maxLongEdge: AVATAR_MAX_LONG_EDGE })
-      const ext = mime === 'image/webp' ? 'webp' : 'jpg'
-      const path = `${uid}/avatar.${ext}`
-      const { error: upErr } = await supabase.storage
-        .from('profile_avatars')
-        .upload(path, blob, { contentType: mime, upsert: true })
-      if (upErr) {
-        formError.value = upErr.message
-        return
-      }
-      const { data: pub } = supabase.storage.from('profile_avatars').getPublicUrl(path)
-      avatarUrl = pub.publicUrl
+      const { publicUrl } = await uploadProfileAvatarToStorage(supabase, uid, file)
+      avatarUrl = publicUrl
     }
 
     const payload = {
