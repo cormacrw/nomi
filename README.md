@@ -10,11 +10,9 @@
 
 ## Contributing
 
-Work is tracked in **Linear** (Nomi) and merged via **GitHub**. Use branches `feature/{issue-key-lowercase}` (e.g. `feature/nom-12`), not Linear’s long auto-generated branch names, unless you have a reason to diverge.
+Work is tracked in **[GitHub Issues](https://github.com/cormacrw/nomi/issues)**. Use a branch per change (for example `feature/12-short-description` or `issue/12`), open a **pull request** to merge, and reference the issue in the PR body (`Fixes #12` or `Closes #12` so the issue closes when the PR lands).
 
-The Cursor skill **[`.cursor/skills/do-task/SKILL.md`](.cursor/skills/do-task/SKILL.md)** describes the full workflow: isolated git worktree per issue, deliverables, **PR as the default close-out**, and syncing Linear (including Figma design steps when the issue is UI work). Invoke it by saying **do-task** with an issue id (e.g. `NOM-12`).
-
-**Typical tooling:** [Git](https://git-scm.com/), [GitHub CLI](https://cli.github.com/) (`gh auth login` to this repo), and in Cursor enable **Linear**, **GitHub**, and **Figma** MCPs if you want the automated path.
+**Typical tooling:** [Git](https://git-scm.com/), [GitHub CLI](https://cli.github.com/) (`gh auth login` to this repo), and optional **Figma** MCP in Cursor for design-related work.
 
 ## Repository layout
 

@@ -258,6 +258,14 @@ const nonGoals = [
         <div class="flex flex-wrap justify-center gap-6 text-sm font-semibold uppercase tracking-[0.14em] text-nomi-ink/55">
           <a class="transition hover:text-nomi-ink" href="#">Terms</a>
           <a class="transition hover:text-nomi-ink" href="#">Privacy</a>
+          <a
+            class="transition hover:text-nomi-ink"
+            href="https://github.com/cormacrw/nomi"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </a>
         </div>
         <p class="flex items-center gap-2 text-xs uppercase tracking-wide text-nomi-ink/45">
           <span class="material-symbols-outlined text-base text-nomi-emerald/80" aria-hidden="true">verified_user</span>
